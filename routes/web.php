@@ -9,7 +9,10 @@ use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DireccionClienteController;
 use App\Http\Controllers\ProveedorController;
-
+use App\Http\Controllers\DetalleTarifaController;
+use App\Http\Controllers\PeriodoRentaController;
+use App\Http\Controllers\PagoController;
+use App\Http\Controllers\MetodoPagoController;
 
 // RUTA PRINCIPAL
 
@@ -83,6 +86,21 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('proveedores', ProveedorController::class);
 
+    // TARIFAS
+
+    Route::resource('detalle_tarifa', DetalleTarifaController::class);
+
+    // PERIODOS DE RENTA
+
+    Route::resource('periodos_renta',PeriodoRentaController::class  );
+
+    //Pagos asociados a una renta
+    Route::get( '/pagos/renta/{id}',[PagoController::class, 'renta'] )->name('pagos.renta');
+    // PAGOS
+    Route::resource( 'pagos', PagoController::class);
+    
+    // METODOS PAGO
+    Route::resource('metodos_pago',  MetodoPagoController::class);
 
     // CERRAR SESIÓN
 
