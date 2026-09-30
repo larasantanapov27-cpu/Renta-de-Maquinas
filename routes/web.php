@@ -16,14 +16,26 @@ use App\Http\Controllers\MetodoPagoController;
 use App\Http\Controllers\EstadoRentaController;
 use App\Http\Controllers\RentaController;
 
+// CONTROLADORES DE MANTENIMIENTO
+use App\Http\Controllers\MantenimientoController;
+use App\Http\Controllers\TipoMantenimientoController;
+use App\Http\Controllers\BajaMaquinaController;
+use App\Http\Controllers\MotivoBajaController;
+
+
 // RUTA PRINCIPAL
+
 Route::get('/', function () {
+
     return Auth::check()
         ? redirect()->route('panel')
         : redirect()->route('login');
+
 });
 
+
 // RUTAS PARA USUARIOS NO AUTENTICADOS
+
 Route::middleware('guest')->group(function () {
 
     Route::get('/login', [login::class, 'showLogin'])
@@ -39,58 +51,161 @@ Route::middleware('guest')->group(function () {
     Route::post('/registro', [login::class, 'register'])
         ->middleware('throttle:5,1')
         ->name('register.store');
+
 });
 
+
 // RUTAS PARA USUARIOS AUTENTICADOS
+
 Route::middleware('auth')->group(function () {
 
-    // Panel principal
+
+    // PANEL PRINCIPAL
+
     Route::view('/panel', 'layouts.template')
         ->name('panel');
 
-    // Personas
+
+    // PERSONAS
+
     Route::resource('personas', PersonaController::class);
 
-    // Clientes
+
+    // CLIENTES
+
     Route::resource('clientes', ClienteController::class);
 
-    // Direcciones de clientes
+
+    // DIRECCIONES DE CLIENTES
+
     Route::resource(
         'direcciones_clientes',
         DireccionClienteController::class
     );
 
-    // Proveedores
+
+    // PROVEEDORES
+
     Route::resource('proveedores', ProveedorController::class);
 
-    // Tarifas
-    Route::resource('detalle_tarifa', DetalleTarifaController::class);
 
-    // Periodos de renta
-    Route::resource('periodos_renta', PeriodoRentaController::class);
 
-    // Pagos asociados a una renta
-    Route::get('/pagos/renta/{id}', [PagoController::class, 'renta'])
-        ->name('pagos.renta');
+    // TARIFAS
 
-    // Pagos
-    Route::resource('pagos', PagoController::class);
+    Route::resource(
+        'detalle_tarifa',
+        DetalleTarifaController::class
+    );
 
-    // Métodos de pago
-    Route::resource('metodos_pago', MetodoPagoController::class);
 
-    // Estados de renta
-    Route::resource('estados_renta', EstadoRentaController::class)
-        ->except(['show'])
-        ->parameters([
-            'estados_renta' => 'estadoRenta',
-        ]);
+    // PERIODOS DE RENTA
 
-    // Rentas: únicamente el listado
-    Route::resource('rentas', RentaController::class)
-        ->only(['index']);
+    Route::resource(
+        'periodos_renta',
+        PeriodoRentaController::class
+    );
 
-    // Cerrar sesión
-    Route::post('/logout', [login::class, 'logout'])
-        ->name('logout');
+
+
+    // MANTENIMIENTOS
+
+    Route::resource(
+        'mantenimientos',
+        MantenimientoController::class
+    );
+
+
+
+    // TIPOS DE MANTENIMIENTO
+
+    Route::resource(
+        'tipos-mantenimiento',
+        TipoMantenimientoController::class
+    )
+    ->except(['index', 'show'])
+    ->names('tipos_mantenimiento');
+
+
+
+    // BAJAS DE MÁQUINAS
+
+    Route::resource(
+        'bajas-maquinas',
+        BajaMaquinaController::class
+    )
+    ->names('bajas_maquinas');
+
+
+
+    // MOTIVOS DE BAJA
+
+    Route::resource(
+        'motivos-baja',
+        MotivoBajaController::class
+    )
+    ->except(['index', 'show'])
+    ->names('motivos_baja');
+
+
+
+    // PAGOS ASOCIADOS A UNA RENTA
+
+    Route::get(
+        '/pagos/renta/{id}',
+        [PagoController::class, 'renta']
+    )
+    ->name('pagos.renta');
+
+
+
+    // PAGOS
+
+    Route::resource(
+        'pagos',
+        PagoController::class
+    );
+
+
+
+    // MÉTODOS DE PAGO
+
+    Route::resource(
+        'metodos_pago',
+        MetodoPagoController::class
+    );
+
+
+
+    // ESTADOS DE RENTA
+
+    Route::resource(
+        'estados_renta',
+        EstadoRentaController::class
+    )
+    ->except(['show'])
+    ->parameters([
+        'estados_renta' => 'estadoRenta',
+    ]);
+
+
+
+    // RENTAS
+
+    Route::resource(
+        'rentas',
+        RentaController::class
+    )
+    ->only(['index']);
+
+
+
+    // CERRAR SESIÓN
+
+    Route::post(
+        '/logout',
+        [login::class, 'logout']
+    )
+    ->name('logout');
+
+
 });
