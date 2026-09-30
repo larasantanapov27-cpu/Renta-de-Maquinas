@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
-
 
 <head>
 
@@ -10,1778 +7,600 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>
+        @yield('titulo', 'Renta de Maquinaria San Juan')
+    </title>
 
-
-
-    <title>@yield('titulo', 'Panel') | Maquinaria San Juan</title>
-
-
-
-    {{-- Bootstrap local --}}
-
-    <link rel="stylesheet"
-
-          href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
-
-
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <style>
 
-        :root {
-
-            --fondo: #e7f2fc;
-
-            --oscuro: #202321;
-
-            --crema: #f5eed8;
-
-            --texto: #252925;
-
-            --gris: #727a74;
-
-        }
-
-
-
         * {
-
             box-sizing: border-box;
-
         }
-
-
 
         body {
-
             margin: 0;
-
-            background: var(--fondo);
-
-            color: var(--texto);
-
+            background: #eaf4fc;
             font-family: Arial, Helvetica, sans-serif;
-
         }
 
-
-
-        .contenedor-app {
-
+        .contenedor-principal {
             display: flex;
-
-            min-height: calc(100vh - 40px);
-
-            max-width: 1600px;
-
-            margin: 20px auto;
-
-            padding: 8px;
-
-            background: var(--oscuro);
-
-            border-radius: 28px;
-
-            box-shadow: 0 20px 50px rgba(34, 52, 70, .15);
-
+            width: calc(100% - 80px);
+            min-height: calc(100vh - 80px);
+            margin: 40px;
+            background: white;
+            border: 7px solid #202522;
+            border-radius: 25px;
+            overflow: hidden;
         }
 
+        /* SIDEBAR */
 
-
-        /* Menú lateral */
-
-        .barra-lateral {
-
-            width: 245px;
-
-            flex-shrink: 0;
-
-            padding: 22px 14px;
-
-            color: #fff;
-
-        }
-
-
-
-        .marca {
-
+        .sidebar {
+            width: 220px;
+            min-width: 220px;
+            background: #202522;
+            color: white;
+            padding: 25px 18px;
             display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            margin-bottom: 30px;
-
-            padding: 0 8px;
-
-        }
-
-
-
-        .marca-logo {
-
-            display: grid;
-
-            place-items: center;
-
-            width: 44px;
-
-            height: 44px;
-
-            flex-shrink: 0;
-
-            border-radius: 13px;
-
-            background: var(--crema);
-
-            color: var(--oscuro);
-
-            font-weight: bold;
-
-            font-size: 17px;
-
-        }
-
-
-
-        .marca-nombre {
-
-            font-size: 20px;
-
-            font-weight: bold;
-
-        }
-
-
-
-        .marca-descripcion {
-
-            display: block;
-
-            margin-top: 4px;
-
-            color: #bdc5be;
-
-            font-size: 9px;
-
-            letter-spacing: 1px;
-
-        }
-
-
-
-        .menu-titulo {
-
-            margin: 24px 12px 10px;
-
-            color: #acb7ae;
-
-            font-size: 10px;
-
-            letter-spacing: 1.5px;
-
-        }
-
-
-
-        .enlace-menu {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            width: 100%;
-
-            margin-bottom: 5px;
-
-            padding: 12px;
-
-            border: 0;
-
-            border-radius: 12px;
-
-            background: transparent;
-
-            color: #e1e6e2;
-
-            font-size: 13px;
-
-            text-align: left;
-
-            text-decoration: none;
-
-            transition: *background* .2s, color .2s;
-
-        }
-
-
-
-        a.enlace-menu:hover,
-
-        button.enlace-menu:hover {
-
-            background: #353c36;
-
-            color: #fff;
-
-        }
-
-
-
-        .enlace-menu.activo {
-
-            background: var(--crema);
-
-            color: var(--oscuro);
-
-            font-weight: bold;
-
-        }
-
-
-
-        .menu-numero {
-
-            min-width: 22px;
-
-            font-size: 10px;
-
-            opacity: .75;
-
-        }
-
-
-
-        .enlace-menu.pendiente {
-
-            color: #a5afa7;
-
-            cursor: default;
-
-        }
-
-
-
-        .catalogos summary {
-
-            cursor: pointer;
-
-            list-style: none;
-
-        }
-
-
-
-        .catalogos summary::-webkit-details-marker {
-
-            display: none;
-
-        }
-
-
-
-        .catalogos summary::after {
-
-            content: "+";
-
-            margin-left: auto;
-
-        }
-
-
-
-        .catalogos[open] summary::after {
-
-            content: "−";
-
-        }
-
-
-
-        .submenu {
-
-            margin-left: 12px;
-
-            padding-left: 8px;
-
-            border-left: 1px solid #465048;
-
-        }
-
-
-
-        .submenu .enlace-menu {
-
-            font-size: 12px;
-
-            padding: 10px;
-
-        }
-
-
-
-        .salir {
-
-            margin-top: 25px;
-
-            padding-top: 16px;
-
-            border-top: 1px solid #414842;
-
-        }
-
-
-
-        .boton-menu {
-
-            display: none;
-
-        }
-
-
-
-        /* Panel principal */
-
-        .panel-principal {
-
-            display: flex;
-
-            flex: 1;
-
             flex-direction: column;
-
-            min-width: 0;
-
-            padding: 30px;
-
-            border-radius: 22px;
-
-            background: #fff;
-
         }
 
-
-
-        .barra-superior {
-
+        .logo {
             display: flex;
-
             align-items: center;
-
-            justify-content: space-between;
-
-            gap: 20px;
-
-            padding-bottom: 25px;
-
-            border-bottom: 1px solid #edf0ed;
-
+            gap: 12px;
+            margin-bottom: 30px;
         }
 
+        .logo-cuadro {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #f6f1dc;
+            color: #202522;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
 
+        .logo-titulo {
+            font-size: 17px;
+            font-weight: bold;
+        }
 
-        .subtitulo-panel {
+        .logo-subtitulo {
+            font-size: 9px;
+            color: #bfc4c1;
+            margin-top: 3px;
+        }
 
-            margin: 0 0 7px;
-
-            color: var(--gris);
-
+        .titulo-menu {
             font-size: 10px;
-
             letter-spacing: 1.5px;
-
+            color: #aeb4b0;
+            margin: 5px 10px 15px;
         }
 
-
-
-        .titulo-panel {
-
+        .menu {
+            list-style: none;
+            padding: 0;
             margin: 0;
-
-            font-size: 28px;
-
-            font-weight: bold;
-
-            letter-spacing: -.8px;
-
         }
 
+        .menu li {
+            margin-bottom: 4px;
+        }
 
-
-        .usuario {
-
+        .menu a {
             display: flex;
-
             align-items: center;
-
-            gap: 10px;
-
-            max-width: 260px;
-
-            padding: 7px 16px 7px 7px;
-
-            border-radius: 30px;
-
-            background: #f5f6f8;
-
-        }
-
-
-
-        .usuario-avatar {
-
-            display: grid;
-
-            place-items: center;
-
-            width: 38px;
-
-            height: 38px;
-
-            flex-shrink: 0;
-
-            border-radius: 50%;
-
-            background: #dfefdf;
-
-            font-weight: bold;
-
-        }
-
-
-
-        .usuario-nombre {
-
+            gap: 12px;
+            text-decoration: none;
+            color: #d1d5d2;
+            padding: 11px 10px;
+            border-radius: 10px;
             font-size: 12px;
+            transition: 0.2s;
+        }
 
+        .menu a:hover {
+            background: #343b37;
+            color: white;
+        }
+
+        .menu a.activo {
+            background: #39413d;
+            color: white;
             font-weight: bold;
-
-            overflow-wrap: anywhere;
-
         }
 
-
-
-        .usuario-etiqueta {
-
-            display: block;
-
-            margin-top: 2px;
-
-            color: var(--gris);
-
-            font-size: 10px;
-
+        .numero {
+            width: 18px;
+            font-size: 9px;
+            color: #aab0ac;
         }
 
+        .separador-menu {
+            border-top: 1px solid #414743;
+            margin: 20px 0;
+        }
 
+        .cerrar-sesion {
+            margin-top: auto;
+        }
+
+        .cerrar-sesion button {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .cerrar-sesion button:hover {
+            background: #343b37;
+            border-radius: 8px;
+        }
+
+        /* CONTENIDO */
 
         .contenido {
-
             flex: 1;
-
             min-width: 0;
-
-            padding: 28px 0;
-
-        }
-
-
-
-        /* Clases reutilizables */
-
-        .tarjeta-contenido {
-
-            padding: 24px;
-
-            border: 1px solid #e9ede9;
-
-            border-radius: 18px;
-
-            background: #fff;
-
-        }
-
-
-
-        .tarjeta-azul {
-
-            background: #e2f0fc;
-
-        }
-
-
-
-        .tarjeta-verde {
-
-            background: #e1efdf;
-
-        }
-
-
-
-        .tarjeta-morada {
-
-            background: #ece3f5;
-
-        }
-
-
-
-        .tarjeta-crema {
-
-            background: #f7f0da;
-
-        }
-
-
-
-        .boton-principal {
-
-            display: inline-block;
-
-            padding: 10px 20px;
-
-            border: 0;
-
-            border-radius: 25px;
-
-            background: var(--oscuro);
-
-            color: #fff;
-
-            font-size: 13px;
-
-            text-decoration: none;
-
-        }
-
-
-
-        .boton-principal:hover {
-
-            background: #3b453d;
-
-            color: #fff;
-
-        }
-
-
-
-        .pie-panel {
-
+            background: white;
+            padding: 25px 28px;
             display: flex;
+            flex-direction: column;
+        }
 
+        .encabezado {
+            display: flex;
             justify-content: space-between;
+            align-items: center;
+            padding-bottom: 18px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e1e5e2;
+        }
 
-            gap: 15px;
+        .nombre-sistema {
+            font-size: 10px;
+            letter-spacing: 1.2px;
+            color: #68716c;
+            margin-bottom: 5px;
+        }
 
-            padding-top: 18px;
+        .titulo-pagina {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
 
-            border-top: 1px solid #edf0ed;
+        .usuario {
+            background: #f4f5f4;
+            border-radius: 30px;
+            padding: 8px 15px 8px 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-            color: var(--gris);
+        .usuario-icono {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #dcefdc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #183a1d;
+        }
 
+        .usuario-nombre {
             font-size: 11px;
-
+            font-weight: bold;
         }
 
-
-
-        :focus-visible {
-
-            outline: 3px solid #669aca;
-
-            outline-offset: 3px;
-
+        .usuario-cuenta {
+            font-size: 9px;
+            color: #777;
         }
 
-
-
-        @media (min-width: 992px) {
-
-            .barra-lateral {
-
-                position: sticky;
-
-                top: 28px;
-
-                align-self: flex-start;
-
-                max-height: calc(100vh - 56px);
-
-                overflow-y: auto;
-
-                scrollbar-width: thin;
-
-                scrollbar-color: #536057 transparent;
-
-            }
-
+        .contenido-vista {
+            flex: 1;
         }
 
-
-
-        @media (max-width: 1650px) {
-
-            .contenedor-app {
-
-                margin: 20px;
-
-            }
-
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #e1e5e2;
+            padding-top: 15px;
+            margin-top: 35px;
+            font-size: 9px;
+            color: #68716c;
         }
 
+        /* TABLAS */
 
+        .table-dark th {
+            background: #252a2d !important;
+            color: white !important;
+            vertical-align: middle;
+        }
 
-        @media (max-width: 991px) {
+        .table td {
+            vertical-align: middle;
+        }
 
-            .contenedor-app {
+        /* RESPONSIVE */
 
-                display: block;
+        @media (max-width: 900px) {
 
-                margin: 12px;
-
-                min-height: calc(100vh - 24px);
-
-            }
-
-
-
-            .barra-lateral {
-
+            .contenedor-principal {
                 width: 100%;
-
-                padding: 14px;
-
+                margin: 0;
+                border-radius: 0;
+                border: none;
             }
 
-
-
-            .marca {
-
-                margin-bottom: 16px;
-
-            }
-
-
-
-            .boton-menu {
-
-                display: block;
-
-                width: 100%;
-
-                padding: 10px 14px;
-
-                border: 1px solid #566258;
-
-                border-radius: 10px;
-
-                background: #343b35;
-
-                color: #fff;
-
-                text-align: left;
-
-            }
-
-
-
-            .navegacion {
-
-                display: none;
-
-                padding-top: 12px;
-
-            }
-
-
-
-            .navegacion.abierta {
-
-                display: block;
-
-            }
-
-
-
-            .panel-principal {
-
-                min-height: 75vh;
-
-                padding: 22px;
-
-            }
-
-        }
-
-
-
-        @media (max-width: 575px) {
-
-            .barra-superior {
-
-                align-items: flex-start;
-
-                flex-direction: column;
-
-                gap: 16px;
-
-            }
-
-
-
-            .titulo-panel {
-
-                font-size: 25px;
-
-            }
-
-
-
-            .panel-principal {
-
-                padding: 20px 16px;
-
-            }
-
-
-
-            .tarjeta-contenido {
-
-                padding: 18px;
-
-            }
-
-
-
-            .pie-panel {
-
-                flex-direction: column;
-
-                gap: 5px;
-
+            .sidebar {
+                width: 190px;
+                min-width: 190px;
             }
 
         }
 
     </style>
 
-
-
-    @stack('styles')
-
 </head>
-
 
 
 <body>
 
+<div class="contenedor-principal">
 
 
-    @php
+    <!-- MENÚ LATERAL -->
 
+    <aside class="sidebar">
 
 
-        /*
+        <!-- LOGO -->
 
-         * Módulos principales.
+        <div class="logo">
 
-         * El orden de este arreglo determina
+            <div class="logo-cuadro">
+                SJ
+            </div>
 
-         * la numeración del menú.
+            <div>
 
-         */
-
-
-
-        $modulos = [
-
-            ['texto' => 'Personas',          'ruta' => 'personas.index'],
-
-            ['texto' => 'Clientes',          'ruta' => 'clientes.index'],
-
-            ['texto' => 'Direcciones de clientes', 'ruta' => 'direcciones_clientes.index'],
-
-            ['texto' => 'Proveedores',       'ruta' => 'proveedores.index'],
-
-            ['texto' => 'Rentas',            'ruta' => 'rentas.index'],
-
-            ['texto' => 'Máquinas',          'ruta' => 'maquinas.index'],
-
-            ['texto' => 'Pagos',             'ruta' => 'pagos.index'],
-
-            ['texto' => 'Compras',           'ruta' => 'compras.index'],
-
-            ['texto' => 'Mantenimientos',    'ruta' => 'mantenimientos.index'],
-
-            ['texto' => 'Bajas de máquinas', 'ruta' => 'bajas_maquinas.index'],
-
-            ['texto' => 'Detalle tarifa',    'ruta' => 'detalle_tarifa.index'],
-
-        ];
-
-
-
-
-
-        /*
-
-         * Catálogos
-
-         */
-
-
-
-        $catalogos = [
-
-            ['texto' => 'Tipos de máquina', 'ruta' => 'tipos_maquina.index'],
-
-            ['texto' => 'Estados de máquina', 'ruta' => 'estados_maquina.index'],
-
-            ['texto' => 'Estados de renta', 'ruta' => 'estados_renta.index'],
-
-            ['texto' => 'Períodos de renta', 'ruta' => 'periodos_renta.index'],
-
-            ['texto' => 'Métodos de pago', 'ruta' => 'metodos_pago.index'],
-
-            ['texto' => 'Tipos de mantenimiento', 'ruta' => 'tipos_mantenimiento.index'],
-
-            ['texto' => 'Motivos de baja', 'ruta' => 'motivos_baja.index'],
-
-        ];
-
-
-
-
-
-        /*
-
-         * Comprueba si actualmente estamos
-
-         * dentro de una ruta de catálogos.
-
-         */
-
-
-
-        $catalogoActivo = false;
-
-
-
-        foreach ($catalogos as $catalogo) {
-
-
-
-            $patron = str_replace(
-
-                '.index',
-
-                '.*',
-
-                $catalogo['ruta']
-
-            );
-
-
-
-            if (request()->routeIs($patron)) {
-
-                $catalogoActivo = true;
-
-                break;
-
-            }
-
-        }
-
-
-
-
-
-        /*
-
-         * Nombre del usuario autenticado.
-
-         */
-
-
-
-        $nombreUsuario = auth()->user()?->name ?? 'Usuario';
-
-
-
-    @endphp
-
-
-
-
-
-    <div class="contenedor-app">
-
-
-
-        <!-- MENÚ LATERAL -->
-
-        <aside class="barra-lateral">
-
-
-
-            <!-- LOGO -->
-
-            <div class="marca">
-
-
-
-                <span class="marca-logo" aria-hidden="true">
-
-                    SJ
-
-                </span>
-
-
-
-                <div>
-
-
-
-                    <span class="marca-nombre">
-
-                        San Juan
-
-                    </span>
-
-
-
-                    <span class="marca-descripcion">
-
-                        RENTA DE MAQUINARIA
-
-                    </span>
-
-
-
+                <div class="logo-titulo">
+                    San Juan
                 </div>
 
+                <div class="logo-subtitulo">
+                    RENTA DE MAQUINARIA
+                </div>
 
+            </div>
+
+        </div>
+
+
+        <div class="titulo-menu">
+            ADMINISTRACIÓN
+        </div>
+
+
+        <ul class="menu">
+
+
+            <!-- PERSONAS -->
+
+            <li>
+                <a
+                    href="{{ route('personas.index') }}"
+                    class="{{ request()->routeIs('personas.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">01</span>
+                    Personas
+                </a>
+            </li>
+
+
+            <!-- CLIENTES -->
+
+            <li>
+                <a
+                    href="{{ route('clientes.index') }}"
+                    class="{{ request()->routeIs('clientes.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">02</span>
+                    Clientes
+                </a>
+            </li>
+
+
+            <!-- DIRECCIONES -->
+
+            <li>
+                <a
+                    href="{{ route('direcciones_clientes.index') }}"
+                    class="{{ request()->routeIs('direcciones_clientes.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">03</span>
+                    Direcciones de clientes
+                </a>
+            </li>
+
+
+            <!-- PROVEEDORES -->
+
+            <li>
+                <a
+                    href="{{ route('proveedores.index') }}"
+                    class="{{ request()->routeIs('proveedores.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">04</span>
+                    Proveedores
+                </a>
+            </li>
+
+
+            <!-- MÁQUINAS -->
+
+            <li>
+                <a
+                    href="{{ route('maquinas.index') }}"
+                    class="{{ request()->routeIs('maquinas.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">05</span>
+                    Máquinas
+                </a>
+            </li>
+
+
+            <!-- COMPRAS -->
+
+            <li>
+                <a
+                    href="{{ route('compras.index') }}"
+                    class="{{ request()->routeIs('compras.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">06</span>
+                    Compras
+                </a>
+            </li>
+
+
+            <!-- TIPOS DE MÁQUINA -->
+
+            <li>
+                <a
+                    href="{{ route('tipos_maquina.index') }}"
+                    class="{{ request()->routeIs('tipos_maquina.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">07</span>
+                    Tipos de máquina
+                </a>
+            </li>
+
+
+            <!-- ESTADOS DE MÁQUINA -->
+
+            <li>
+                <a
+                    href="{{ route('estados_maquina.index') }}"
+                    class="{{ request()->routeIs('estados_maquina.*') ? 'activo' : '' }}"
+                >
+                    <span class="numero">08</span>
+                    Estados de máquina
+                </a>
+            </li>
+
+
+        </ul>
+
+
+        <div class="separador-menu"></div>
+
+
+        <div class="titulo-menu">
+            CONFIGURACIÓN
+        </div>
+
+
+        <ul class="menu">
+
+            <li>
+
+                <a href="javascript:void(0);">
+
+                    <span>
+                        Catálogos
+                    </span>
+
+                    <span style="margin-left:auto;">
+                        +
+                    </span>
+
+                </a>
+
+            </li>
+
+        </ul>
+
+
+        <div class="cerrar-sesion">
+
+            <div class="separador-menu"></div>
+
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+            >
+
+                @csrf
+
+                <button type="submit">
+                    ↪ Cerrar sesión
+                </button>
+
+            </form>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="contenido">
+
+
+        <!-- ENCABEZADO -->
+
+        <header class="encabezado">
+
+            <div>
+
+                <div class="nombre-sistema">
+                    RENTA DE MAQUINARIA SAN JUAN
+                </div>
+
+                <h1 class="titulo-pagina">
+                    @yield('titulo', 'Panel')
+                </h1>
 
             </div>
 
 
+            <div class="usuario">
 
+                <div class="usuario-icono">
 
-
-            <!-- BOTÓN MENÚ RESPONSIVE -->
-
-            <button
-
-                type="button"
-
-                class="boton-menu"
-
-                id="botonMenu"
-
-                aria-controls="menuPrincipal"
-
-                aria-expanded="false"
-
-            >
-
-                ☰ Menú de navegación
-
-            </button>
-
-
-
-
-
-            <!-- NAVEGACIÓN -->
-
-            <nav
-
-                class="navegacion"
-
-                id="menuPrincipal"
-
-                aria-label="Menú principal"
-
-            >
-
-
-
-                <p class="menu-titulo">
-
-                    ADMINISTRACIÓN
-
-                </p>
-
-
-
-
-
-                <!-- MÓDULOS PRINCIPALES -->
-
-                @foreach ($modulos as $modulo)
-
-
-
-                    @php
-
-
-
-                        /*
-
-                         * Comprueba si la ruta existe.
-
-                         */
-
-
-
-                        $existe = \Illuminate\Support\Facades\Route::has(
-
-                            $modulo['ruta']
-
-                        );
-
-
-
-
-
-                        /*
-
-                         * Comprueba si el módulo
-
-                         * está actualmente seleccionado.
-
-                         */
-
-
-
-                        $activo = request()->routeIs(
-
-                            str_replace(
-
-                                '.index',
-
-                                '.*',
-
-                                $modulo['ruta']
-
-                            )
-
-                        );
-
-
-
-                    @endphp
-
-
-
-
-
-                    @if ($existe)
-
-
-
-                        <a
-
-                            href="{{ route($modulo['ruta']) }}"
-
-                            class="enlace-menu {{ $activo ? 'activo' : '' }}"
-
-                            @if ($activo)
-
-                                aria-current="page"
-
-                            @endif
-
-                        >
-
-
-
-                            <span
-
-                                class="menu-numero"
-
-                                aria-hidden="true"
-
-                            >
-
-                                {{ str_pad(
-
-                                    $loop->iteration,
-
-                                    2,
-
-                                    '0',
-
-                                    STR_PAD_LEFT
-
-                                ) }}
-
-                            </span>
-
-
-
-                            {{ $modulo['texto'] }}
-
-
-
-                        </a>
-
-
-
+                    @auth
+                        {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 1)) }}
                     @else
+                        U
+                    @endauth
 
-
-
-                        <span
-
-                            class="enlace-menu pendiente"
-
-                            aria-disabled="true"
-
-                            title="Módulo pendiente de habilitar"
-
-                        >
-
-
-
-                            <span
-
-                                class="menu-numero"
-
-                                aria-hidden="true"
-
-                            >
-
-                                {{ str_pad(
-
-                                    $loop->iteration,
-
-                                    2,
-
-                                    '0',
-
-                                    STR_PAD_LEFT
-
-                                ) }}
-
-                            </span>
-
-
-
-                            {{ $modulo['texto'] }}
-
-
-
-                        </span>
-
-
-
-                    @endif
-
-
-
-                @endforeach
-
-
-
-
-
-                <!-- CONFIGURACIÓN -->
-
-                <p class="menu-titulo">
-
-                    CONFIGURACIÓN
-
-                </p>
-
-
-
-
-
-                <!-- CATÁLOGOS -->
-
-                <details
-
-                    class="catalogos"
-
-                    @if ($catalogoActivo)
-
-                        open
-
-                    @endif
-
-                >
-
-
-
-                    <summary class="enlace-menu">
-
-                        Catálogos
-
-                    </summary>
-
-
-
-
-
-                    <div class="submenu">
-
-
-
-                        @foreach ($catalogos as $catalogo)
-
-
-
-                            @php
-
-
-
-                                $existe = \Illuminate\Support\Facades\Route::has(
-
-                                    $catalogo['ruta']
-
-                                );
-
-
-
-                                $activo = request()->routeIs(
-
-                                    str_replace(
-
-                                        '.index',
-
-                                        '.*',
-
-                                        $catalogo['ruta']
-
-                                    )
-
-                                );
-
-
-
-                            @endphp
-
-
-
-
-
-                            @if ($existe)
-
-
-
-                                <a
-
-                                    href="{{ route($catalogo['ruta']) }}"
-
-                                    class="enlace-menu {{ $activo ? 'activo' : '' }}"
-
-                                    @if ($activo)
-
-                                        aria-current="page"
-
-                                    @endif
-
-                                >
-
-
-
-                                    {{ $catalogo['texto'] }}
-
-
-
-                                </a>
-
-
-
-                            @else
-
-
-
-                                <span
-
-                                    class="enlace-menu pendiente"
-
-                                    aria-disabled="true"
-
-                                    title="Catálogo pendiente de habilitar"
-
-                                >
-
-
-
-                                    {{ $catalogo['texto'] }}
-
-
-
-                                </span>
-
-
-
-                            @endif
-
-
-
-                        @endforeach
-
-
-
-                    </div>
-
-
-
-                </details>
-
-
-
-
-
-                <!-- CERRAR SESIÓN -->
-
-                @if (\Illuminate\Support\Facades\Route::has('logout'))
-
-
-
-                    <form
-
-                        action="{{ route('logout') }}"
-
-                        method="POST"
-
-                        class="salir"
-
-                    >
-
-
-
-                        @csrf
-
-
-
-                        <button
-
-                            type="submit"
-
-                            class="enlace-menu"
-
-                        >
-
-                            ↪ Cerrar sesión
-
-                        </button>
-
-
-
-                    </form>
-
-
-
-                @endif
-
-
-
-            </nav>
-
-
-
-        </aside>
-
-
-
-
-
-        <!-- PANEL PRINCIPAL -->
-
-        <main class="panel-principal">
-
-
-
-            <!-- ENCABEZADO -->
-
-            <header class="barra-superior">
-
+                </div>
 
 
                 <div>
 
+                    <div class="usuario-nombre">
 
-
-                    <p class="subtitulo-panel">
-
-                        RENTA DE MAQUINARIA SAN JUAN
-
-                    </p>
-
-
-
-                    <h1 class="titulo-panel">
-
-                        @yield('titulo', 'Panel de administración')
-
-                    </h1>
-
-
-
-                </div>
-
-
-
-
-
-                <!-- USUARIO -->
-
-                <div class="usuario">
-
-
-
-                    <span
-
-                        class="usuario-avatar"
-
-                        aria-hidden="true"
-
-                    >
-
-                        {{ mb_strtoupper(
-
-                            mb_substr($nombreUsuario, 0, 1)
-
-                        ) }}
-
-                    </span>
-
-
-
-                    <div>
-
-
-
-                        <span class="usuario-nombre">
-
-                            {{ $nombreUsuario }}
-
-                        </span>
-
-
-
-                        <span class="usuario-etiqueta">
-
-                            Mi cuenta
-
-                        </span>
-
-
+                        @auth
+                            {{ Auth::user()->name ?? 'Usuario' }}
+                        @else
+                            Usuario
+                        @endauth
 
                     </div>
 
-
+                    <div class="usuario-cuenta">
+                        Mi cuenta
+                    </div>
 
                 </div>
 
+            </div>
+
+        </header>
 
 
-            </header>
+        <!-- MENSAJE DE ÉXITO -->
 
+        @if(session('success'))
 
-
-
-
-            <!-- CONTENIDO -->
-
-            <section
-
-                class="contenido"
-
-                aria-label="Contenido de la página"
-
+            <div
+                class="alert alert-success alert-dismissible fade show"
+                role="alert"
             >
 
+                {{ session('success') }}
 
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                ></button>
 
-                <!-- MENSAJE DE ÉXITO -->
+            </div>
 
-                @if (session('success'))
+        @endif
 
 
+        <!-- MENSAJE DE ERROR -->
 
-                    <div
+        @if(session('error'))
 
-                        class="alert alert-success"
+            <div
+                class="alert alert-danger alert-dismissible fade show"
+                role="alert"
+            >
 
-                        role="status"
+                {{ session('error') }}
 
-                    >
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                ></button>
 
-                        {{ session('success') }}
+            </div>
 
-                    </div>
+        @endif
 
 
+        <!-- AQUÍ SE CARGAN LAS VISTAS -->
 
-                @endif
+        <div class="contenido-vista">
 
+            @yield('contenido')
 
+        </div>
 
 
+        <!-- PIE DE PÁGINA -->
 
-                <!-- MENSAJE DE ERROR -->
+        <footer class="footer">
 
-                @if (session('error'))
+            <div>
+                San Juan · Gestión de maquinaria
+            </div>
 
+            <div>
+                {{ date('Y') }}
+            </div>
 
+        </footer>
 
-                    <div
 
-                        class="alert alert-danger"
+    </main>
 
-                        role="alert"
 
-                    >
+</div>
 
-                        {{ session('error') }}
 
-                    </div>
-
-
-
-                @endif
-
-
-
-
-
-                <!-- ERRORES DE VALIDACIÓN -->
-
-                @if ($errors->any())
-
-
-
-                    <div
-
-                        class="alert alert-danger"
-
-                        role="alert"
-
-                    >
-
-
-
-                        <strong>
-
-                            Revisa la información:
-
-                        </strong>
-
-
-
-                        <ul class="mb-0 mt-2">
-
-
-
-                            @foreach ($errors->all() as $error)
-
-
-
-                                <li>
-
-                                    {{ $error }}
-
-                                </li>
-
-
-
-                            @endforeach
-
-
-
-                        </ul>
-
-
-
-                    </div>
-
-
-
-                @endif
-
-
-
-
-
-                <!-- CONTENIDO DE CADA VISTA -->
-
-                @yield('contenido')
-
-
-
-            </section>
-
-
-
-
-
-            <!-- PIE -->
-
-            <footer class="pie-panel">
-
-
-
-                <span>
-
-                    San Juan · Gestión de maquinaria
-
-                </span>
-
-
-
-                <span>
-
-                    {{ date('Y') }}
-
-                </span>
-
-
-
-            </footer>
-
-
-
-        </main>
-
-
-
-    </div>
-
-
-
-
-
-    {{-- Bootstrap local --}}
-
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-
-
-
-
-    <script>
-
-
-
-        const botonMenu =
-
-            document.getElementById('botonMenu');
-
-
-
-        const menuPrincipal =
-
-            document.getElementById('menuPrincipal');
-
-
-
-
-
-        /*
-
-         * Abrir y cerrar menú en dispositivos pequeños.
-
-         */
-
-
-
-        botonMenu.addEventListener('click', () => {
-
-
-
-            const abierto =
-
-                menuPrincipal.classList.toggle('abierta');
-
-
-
-            botonMenu.setAttribute(
-
-                'aria-expanded',
-
-                String(abierto)
-
-            );
-
-
-
-        });
-
-
-
-
-
-        /*
-
-         * Cerrar menú utilizando Escape.
-
-         */
-
-
-
-        document.addEventListener('keydown', (event) => {
-
-
-
-            if (
-
-                event.key === 'Escape' &&
-
-                menuPrincipal.classList.contains('abierta')
-
-            ) {
-
-
-
-                menuPrincipal.classList.remove('abierta');
-
-
-
-                botonMenu.setAttribute(
-
-                    'aria-expanded',
-
-                    'false'
-
-                );
-
-
-
-                botonMenu.focus();
-
-
-
-            }
-
-
-
-        });
-
-
-
-    </script>
-
-
-
-    @stack('scripts')
-
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
 
 
 </body>
-
-
 
 </html>
