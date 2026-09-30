@@ -9,85 +9,68 @@ use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DireccionClienteController;
 use App\Http\Controllers\ProveedorController;
-
+use App\Http\Controllers\EstadoRentaController;
+use App\Http\Controllers\RentaController;
 
 // RUTA PRINCIPAL
-
 Route::get('/', function () {
-
-    // Si el usuario inició sesión, se envía al panel
-    if (Auth::check()) {
-        return redirect()->route('panel');
-    }
-
-    // Si no inició sesión, se envía al login
-    return redirect()->route('login');
-
+    return Auth::check()
+        ? redirect()->route('panel')
+        : redirect()->route('login');
 });
 
-
 // RUTAS PARA USUARIOS NO AUTENTICADOS
-
 Route::middleware('guest')->group(function () {
 
-    // Mostrar formulario de inicio de sesión
     Route::get('/login', [login::class, 'showLogin'])
         ->name('login');
 
-    // Procesar inicio de sesión
     Route::post('/login', [login::class, 'login'])
         ->middleware('throttle:5,1')
         ->name('login.store');
 
-    // Mostrar formulario de registro
     Route::get('/registro', [login::class, 'showRegister'])
         ->name('register');
 
-    // Procesar registro
     Route::post('/registro', [login::class, 'register'])
         ->middleware('throttle:5,1')
         ->name('register.store');
-
 });
 
-
 // RUTAS PARA USUARIOS AUTENTICADOS
-
 Route::middleware('auth')->group(function () {
 
-    // PANEL PRINCIPAL
-
+    // Panel principal
     Route::view('/panel', 'layouts.template')
         ->name('panel');
 
-
-    // PERSONAS
-
+    // Personas
     Route::resource('personas', PersonaController::class);
 
-
-    // CLIENTES
-
+    // Clientes
     Route::resource('clientes', ClienteController::class);
 
-
-    // DIRECCIONES DE CLIENTES
-
+    // Direcciones de clientes
     Route::resource(
         'direcciones_clientes',
         DireccionClienteController::class
     );
 
-
-    // PROVEEDORES
-
+    // Proveedores
     Route::resource('proveedores', ProveedorController::class);
 
+    // Estados de renta
+    Route::resource('estados_renta', EstadoRentaController::class)
+        ->except(['show'])
+        ->parameters([
+            'estados_renta' => 'estadoRenta',
+        ]);
 
-    // CERRAR SESIÓN
+    // Rentas: por ahora habilitamos únicamente el listado.
+    Route::resource('rentas', RentaController::class)
+    ->only(['index']);
 
+    // Cerrar sesión
     Route::post('/logout', [login::class, 'logout'])
         ->name('logout');
-
 });
-////////////////////////no soy gei/////////////////////
