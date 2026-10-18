@@ -138,10 +138,12 @@
                     Guardar
                 </button>
 
-                <a href="{{ route('detalle_tarifa.index') }}"
+                @can('tarifas.consultar')
+<a href="{{ route('detalle_tarifa.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

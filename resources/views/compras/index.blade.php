@@ -14,9 +14,11 @@
         </p>
     </div>
 
-    <a href="{{ route('compras.create') }}" class="btn btn-dark">
+    @can('compras.registrar')
+<a href="{{ route('compras.create') }}" class="btn btn-dark">
         Nueva Compra
     </a>
+@endcan
 
 </div>
 
@@ -158,32 +160,17 @@
                                 class="d-flex justify-content-center align-items-center gap-1 flex-nowrap"
                             >
 
-                                <a
+                                @can('compras.modificar')
+<a
                                     href="{{ route('compras.edit', $compra->id_compra) }}"
                                     class="btn btn-outline-dark btn-sm"
                                 >
                                     Editar
                                 </a>
+@endcan
 
 
-                                <form
-                                    action="{{ route('compras.destroy', $compra->id_compra) }}"
-                                    method="POST"
-                                    class="m-0 p-0"
-                                    onsubmit="return confirm('¿Seguro que deseas eliminar esta compra?');"
-                                >
 
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-outline-danger btn-sm"
-                                    >
-                                        Eliminar
-                                    </button>
-
-                                </form>
 
                             </div>
 

@@ -3,6 +3,7 @@
 @section('titulo', 'Rentas')
 
 @section('contenido')
+@can('rentas.registrar')<a class="btn btn-dark mb-3" href="{{ route('rentas.create') }}">Registrar renta</a>@endcan
     <div class="tarjeta-contenido">
 
         {{-- Encabezado --}}
@@ -42,12 +43,14 @@
                         Buscar
                     </button>
 
-                    <a
+                    @can('rentas.consultar')
+<a
                         href="{{ route('rentas.index') }}"
                         class="btn btn-outline-secondary rounded-pill"
                     >
                         Limpiar
                     </a>
+@endcan
                 </div>
             </div>
         </form>
@@ -99,6 +102,9 @@
                         <tr>
                             <td class="fw-semibold text-nowrap">
                                 #{{ $renta->id_renta }}
+<a class="d-block" href="{{ route('rentas.show',$renta->id_renta) }}">Detalles</a>
+@can('rentas.modificar')<a class="d-block" href="{{ route('rentas.edit',$renta->id_renta) }}">Editar</a>@endcan
+@can('rentas.devolver')<a class="d-block" href="{{ route('rentas.devolucion',$renta->id_renta) }}">Devolver</a>@endcan
                             </td>
 
                             <td style="min-width: 180px;">

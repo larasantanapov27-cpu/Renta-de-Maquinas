@@ -15,10 +15,12 @@
             </p>
         </div>
 
-        <a href="{{ route('periodos_renta.create') }}"
+        @can('catalogos.registrar')
+<a href="{{ route('periodos_renta.create') }}"
            class="btn btn-dark">
             Nuevo Período
         </a>
+@endcan
 
     </div>
 
@@ -54,26 +56,14 @@
 
                                 <td class="text-center">
 
-                                    <a href="{{ route('periodos_renta.edit', $periodo->id_periodo) }}"
+                                    @can('catalogos.modificar')
+<a href="{{ route('periodos_renta.edit', $periodo->id_periodo) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar
                                     </a>
+@endcan
 
-                                    <form
-                                        action="{{ route('periodos_renta.destroy', $periodo->id_periodo) }}"
-                                        method="POST"
-                                        class="d-inline">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('¿Deseas eliminar este período?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </td>
 
@@ -100,10 +90,12 @@
 
         <div class="card-footer">
 
-            <a href="{{ route('detalle_tarifa.index') }}"
+            @can('tarifas.consultar')
+<a href="{{ route('detalle_tarifa.index') }}"
                class="btn btn-secondary">
                 Regresar a Tarifas
             </a>
+@endcan
 
         </div>
 

@@ -156,10 +156,12 @@
         </p>
     </div>
 
-    <a href="{{ route('mantenimientos.create') }}"
+    @can('mantenimientos.registrar')
+<a href="{{ route('mantenimientos.create') }}"
        class="boton-nuevo">
         + Nuevo mantenimiento
     </a>
+@endcan
 
 </div>
 
@@ -234,35 +236,17 @@
 
                         <td>
 
-                            <a href="{{ route(
+                            @can('mantenimientos.modificar')
+<a href="{{ route(
                                 'mantenimientos.edit',
                                 $mantenimiento->id_mantenimiento
                             ) }}"
                                class="boton-editar">
                                 Editar
                             </a>
+@endcan
 
-                            <form
-                                action="{{ route(
-                                    'mantenimientos.destroy',
-                                    $mantenimiento->id_mantenimiento
-                                ) }}"
-                                method="POST"
-                                style="display:inline"
-                            >
 
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="boton-eliminar"
-                                    onclick="return confirm('¿Eliminar este mantenimiento?')"
-                                >
-                                    Borrar
-                                </button>
-
-                            </form>
 
                         </td>
 
@@ -298,10 +282,12 @@
             </small>
         </div>
 
-        <a href="{{ route('tipos_mantenimiento.create') }}"
+        @can('catalogos.registrar')
+<a href="{{ route('tipos_mantenimiento.create') }}"
            class="boton-nuevo">
             + Nuevo tipo
         </a>
+@endcan
 
     </div>
 
@@ -338,35 +324,17 @@
 
                         <td>
 
-                            <a href="{{ route(
+                            @can('catalogos.modificar')
+<a href="{{ route(
                                 'tipos_mantenimiento.edit',
                                 $tipo->id_tipo_mantenimiento
                             ) }}"
                                class="boton-editar">
                                 Editar
                             </a>
+@endcan
 
-                            <form
-                                action="{{ route(
-                                    'tipos_mantenimiento.destroy',
-                                    $tipo->id_tipo_mantenimiento
-                                ) }}"
-                                method="POST"
-                                style="display:inline"
-                            >
 
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="boton-eliminar"
-                                    onclick="return confirm('¿Eliminar este tipo de mantenimiento?')"
-                                >
-                                    Borrar
-                                </button>
-
-                            </form>
 
                         </td>
 

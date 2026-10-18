@@ -32,7 +32,7 @@ class MetodoPagoController extends Controller
         ]);
 
         return redirect()
-            ->route('metodos_pago.index')
+            ->route('panel')
             ->with('success', 'Método de pago registrado correctamente.');
     }
 
@@ -61,7 +61,7 @@ class MetodoPagoController extends Controller
             ]);
 
         return redirect()
-            ->route('metodos_pago.index')
+            ->route('panel')
             ->with('success', 'Método de pago actualizado correctamente.');
     }
 
@@ -73,7 +73,7 @@ class MetodoPagoController extends Controller
 
         if ($usado) {
             return redirect()
-                ->route('metodos_pago.index')
+                ->route('panel')
                 ->with(
                     'error',
                     'No se puede eliminar porque el método está asociado a uno o más pagos.'
@@ -85,7 +85,7 @@ class MetodoPagoController extends Controller
             ->delete();
 
         return redirect()
-            ->route('metodos_pago.index')
+            ->route('panel')
             ->with('success', 'Método de pago eliminado correctamente.');
     }
 }

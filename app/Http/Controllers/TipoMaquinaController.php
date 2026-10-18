@@ -32,7 +32,7 @@ class TipoMaquinaController extends Controller
         ]);
 
         return redirect()
-            ->route('tipos_maquina.index')
+            ->route('panel')
             ->with('success', 'Tipo de máquina registrado correctamente.');
     }
 
@@ -60,7 +60,7 @@ class TipoMaquinaController extends Controller
         ]);
 
         return redirect()
-            ->route('tipos_maquina.index')
+            ->route('panel')
             ->with('success', 'Tipo de máquina actualizado correctamente.');
     }
 
@@ -71,7 +71,7 @@ class TipoMaquinaController extends Controller
         $tipo->delete();
 
         return redirect()
-            ->route('tipos_maquina.index')
+            ->route('panel')
             ->with('success', 'Tipo de máquina eliminado correctamente.');
     }
 }

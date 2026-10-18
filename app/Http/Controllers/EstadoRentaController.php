@@ -33,7 +33,7 @@ class EstadoRentaController extends Controller
         EstadoRenta::create($data);
 
         return redirect()
-            ->route('estados_renta.index')
+            ->route('panel')
             ->with('success', 'El estado de renta se registró correctamente.');
     }
 
@@ -51,10 +51,11 @@ class EstadoRentaController extends Controller
     {
         $data = $this->validarDatos($request, $estadoRenta);
 
+        abort_if($data['nombre'] !== $estadoRenta->nombre,422,'Los nombres de estados operativos se conservan para proteger las reglas del negocio.');
         $estadoRenta->update($data);
 
         return redirect()
-            ->route('estados_renta.index')
+            ->route('panel')
             ->with('success', 'El estado de renta se actualizó correctamente.');
     }
 
@@ -63,7 +64,7 @@ class EstadoRentaController extends Controller
     {
         if ($estadoRenta->rentas()->exists()) {
             return redirect()
-                ->route('estados_renta.index')
+                ->route('panel')
                 ->with(
                     'error',
                     'No puedes eliminar este estado porque tiene rentas asociadas.'
@@ -76,7 +77,7 @@ class EstadoRentaController extends Controller
             // MySQL/MariaDB: una llave foránea impide la eliminación.
             if ((int) ($exception->errorInfo[1] ?? 0) === 1451) {
                 return redirect()
-                    ->route('estados_renta.index')
+                    ->route('panel')
                     ->with(
                         'error',
                         'No puedes eliminar este estado porque tiene registros asociados.'
@@ -87,7 +88,7 @@ class EstadoRentaController extends Controller
         }
 
         return redirect()
-            ->route('estados_renta.index')
+            ->route('panel')
             ->with('success', 'El estado de renta se eliminó correctamente.');
     }
 

@@ -14,10 +14,12 @@
                 </p>
             </div>
 
-            <a href="{{ route('estados_renta.create') }}"
+            @can('catalogos.registrar')
+<a href="{{ route('estados_renta.create') }}"
                class="boton-principal">
                 + Nuevo estado
             </a>
+@endcan
         </div>
 
         <div class="table-responsive">
@@ -53,13 +55,15 @@
 
                             <td>
                                 <div class="d-flex justify-content-end gap-2">
-                                    <a
+                                    @can('catalogos.modificar')
+<a
                                         href="{{ route('estados_renta.edit', $estado) }}"
                                         class="btn btn-outline-dark btn-sm"
                                         aria-label="Editar estado {{ $estado->nombre }}"
                                     >
                                         Editar
                                     </a>
+@endcan
 
                                     @if ($estado->rentas_count > 0)
                                         <span
@@ -74,22 +78,7 @@
                                             </button>
                                         </span>
                                     @else
-                                        <form
-                                            action="{{ route('estados_renta.destroy', $estado) }}"
-                                            method="POST"
-                                            onsubmit="return confirm('¿Deseas eliminar este estado de renta? Esta acción no se puede deshacer.');"
-                                        >
-                                            @csrf
-                                            @method('DELETE')
 
-                                            <button
-                                                type="submit"
-                                                class="btn btn-outline-danger btn-sm"
-                                                aria-label="Eliminar estado {{ $estado->nombre }}"
-                                            >
-                                                Eliminar
-                                            </button>
-                                        </form>
                                     @endif
                                 </div>
                             </td>

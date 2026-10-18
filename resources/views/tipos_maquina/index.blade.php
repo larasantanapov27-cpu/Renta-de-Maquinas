@@ -14,12 +14,14 @@
         </p>
     </div>
 
-    <a
+    @can('catalogos.registrar')
+<a
         href="{{ route('tipos_maquina.create') }}"
         class="btn btn-dark"
     >
         Nuevo Tipo
     </a>
+@endcan
 
 </div>
 
@@ -64,31 +66,16 @@
 
                         <td class="text-center">
 
-                            <a
+                            @can('catalogos.modificar')
+<a
                                 href="{{ route('tipos_maquina.edit', $tipo->id_tipo_maquina) }}"
                                 class="btn btn-outline-dark btn-sm"
                             >
                                 Editar
                             </a>
+@endcan
 
-                            <form
-                                action="{{ route('tipos_maquina.destroy', $tipo->id_tipo_maquina) }}"
-                                method="POST"
-                                class="d-inline"
-                                onsubmit="return confirm('¿Seguro que deseas eliminar este tipo de máquina?');"
-                            >
 
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-outline-danger btn-sm"
-                                >
-                                    Eliminar
-                                </button>
-
-                            </form>
 
                         </td>
 

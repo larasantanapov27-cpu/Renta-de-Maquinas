@@ -15,10 +15,12 @@
             </p>
         </div>
 
-        <a href="{{ route('direcciones_clientes.create') }}"
+        @can('clientes.registrar')
+<a href="{{ route('direcciones_clientes.create') }}"
            class="btn btn-dark">
             Nueva Dirección
         </a>
+@endcan
 
     </div>
 
@@ -93,24 +95,14 @@
 
                                     <div class="d-flex gap-2">
 
-                                        <a href="{{ route('direcciones_clientes.edit', $direccion->id_direccion) }}"
+                                        @can('clientes.modificar')
+<a href="{{ route('direcciones_clientes.edit', $direccion->id_direccion) }}"
                                            class="btn btn-sm btn-outline-dark">
                                             Editar
                                         </a>
+@endcan
 
-                                        <form action="{{ route('direcciones_clientes.destroy', $direccion->id_direccion) }}"
-                                              method="POST">
 
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('¿Deseas eliminar esta dirección?')">
-                                                Eliminar
-                                            </button>
-
-                                        </form>
 
                                     </div>
 

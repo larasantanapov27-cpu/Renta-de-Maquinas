@@ -1,4 +1,4 @@
-@extends('layouts.template') 
+@extends('layouts.template')
 
 @section('contenido')
 
@@ -131,10 +131,12 @@
 
                 <div class="form-actions">
 
-                    <a href="{{ route('bajas_maquinas.index') }}"
+                    @can('bajas_maquinas.consultar')
+<a href="{{ route('bajas_maquinas.index') }}"
                        class="btn-cancelar">
                         Cancelar
                     </a>
+@endcan
 
                     <button type="submit"
                             class="btn-guardar">

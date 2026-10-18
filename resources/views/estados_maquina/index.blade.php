@@ -18,12 +18,14 @@
 
     </div>
 
-    <a
+    @can('catalogos.registrar')
+<a
         href="{{ route('estados_maquina.create') }}"
         class="btn btn-dark"
     >
         Nuevo Estado
     </a>
+@endcan
 
 </div>
 
@@ -74,31 +76,16 @@
 
                         <td class="text-center">
 
-                            <a
+                            @can('catalogos.modificar')
+<a
                                 href="{{ route('estados_maquina.edit', $estado->id_estado_maquina) }}"
                                 class="btn btn-outline-dark btn-sm"
                             >
                                 Editar
                             </a>
+@endcan
 
-                            <form
-                                action="{{ route('estados_maquina.destroy', $estado->id_estado_maquina) }}"
-                                method="POST"
-                                class="d-inline"
-                                onsubmit="return confirm('¿Seguro que deseas eliminar este estado de máquina?');"
-                            >
 
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-outline-danger btn-sm"
-                                >
-                                    Eliminar
-                                </button>
-
-                            </form>
 
                         </td>
 

@@ -39,10 +39,12 @@
                     Actualizar
                 </button>
 
-                <a href="{{ route('periodos_renta.index') }}"
+                @can('catalogos.consultar')
+<a href="{{ route('periodos_renta.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

@@ -55,10 +55,12 @@
                     Actualizar
                 </button>
 
-                <a href="{{ route('metodos_pago.index') }}"
+                @can('catalogos.consultar')
+<a href="{{ route('metodos_pago.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

@@ -258,10 +258,12 @@
 
         <div class="acciones-formulario">
 
-            <a href="{{ route('mantenimientos.index') }}"
+            @can('mantenimientos.consultar')
+<a href="{{ route('mantenimientos.index') }}"
                class="boton-cancelar">
                 Cancelar
             </a>
+@endcan
 
             <button type="submit"
                     class="boton-guardar">

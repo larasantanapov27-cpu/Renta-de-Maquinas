@@ -13,10 +13,12 @@
         </p>
     </div>
 
-    <a href="{{ route('proveedores.create') }}"
+    @can('proveedores.registrar')
+<a href="{{ route('proveedores.create') }}"
        class="btn btn-dark">
         Nuevo proveedor
     </a>
+@endcan
 
 </div>
 
@@ -88,26 +90,15 @@
 
                                 <td class="text-center">
 
-                                    <a href="{{ route('proveedores.edit', $proveedor->id_proveedor) }}"
+                                    @can('proveedores.modificar')
+<a href="{{ route('proveedores.edit', $proveedor->id_proveedor) }}"
                                        class="btn btn-primary btn-sm">
                                         Editar
                                     </a>
+@endcan
 
 
-                                    <form action="{{ route('proveedores.destroy', $proveedor->id_proveedor) }}"
-                                          method="POST"
-                                          class="d-inline">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('¿Está seguro de eliminar este proveedor?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </td>
 

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class TipoMantenimientoController extends Controller
 {
+    public function index() { return view('accesos.catalogo',['registros'=>\Illuminate\Support\Facades\DB::table('tipos_mantenimiento')->get(),'modulo'=>'tipos_mantenimiento','llave'=>'id_tipo_mantenimiento']); }
+
     // Mostrar formulario para crear tipo de mantenimiento
     public function create()
     {
@@ -28,7 +30,7 @@ class TipoMantenimientoController extends Controller
         ]);
 
         return redirect()
-            ->route('tipos_mantenimiento.create')
+            ->route('panel')
             ->with('success', 'Tipo de mantenimiento registrado correctamente');
     }
 
@@ -58,7 +60,7 @@ class TipoMantenimientoController extends Controller
         ]);
 
         return redirect()
-            ->route('tipos_mantenimiento.create')
+            ->route('panel')
             ->with('success', 'Tipo de mantenimiento actualizado correctamente');
     }
 
@@ -71,7 +73,7 @@ class TipoMantenimientoController extends Controller
         $tipo->delete();
 
         return redirect()
-            ->route('tipos_mantenimiento.create')
+            ->route('panel')
             ->with('success', 'Tipo de mantenimiento eliminado correctamente');
     }
 }

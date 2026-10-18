@@ -22,12 +22,14 @@
 
         </div>
 
-        <a href="{{ route('pagos.index') }}"
+        @can('pagos.consultar')
+<a href="{{ route('pagos.index') }}"
            class="btn btn-secondary">
 
             Regresar a Pagos
 
         </a>
+@endcan
 
     </div>
 
@@ -111,12 +113,14 @@
                 Historial de Pagos
             </h5>
 
-            <a href="{{ route('pagos.create', ['renta' => $renta->id_renta]) }}"
+            @can('pagos.registrar')
+<a href="{{ route('pagos.create', ['renta' => $renta->id_renta]) }}"
                class="btn btn-dark btn-sm">
 
                 Registrar Pago
 
             </a>
+@endcan
 
         </div>
 
@@ -175,29 +179,16 @@
 
                                 <td class="text-center">
 
-                                    <a href="{{ route('pagos.edit', $pago->id_pago) }}"
+                                    @can('pagos.modificar')
+<a href="{{ route('pagos.edit', $pago->id_pago) }}"
                                        class="btn btn-sm btn-outline-dark">
 
                                         Editar
 
                                     </a>
+@endcan
 
-                                    <form action="{{ route('pagos.destroy', $pago->id_pago) }}"
-                                          method="POST"
-                                          class="d-inline">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('¿Deseas eliminar este pago?')">
-
-                                            Eliminar
-
-                                        </button>
-
-                                    </form>
 
                                 </td>
 

@@ -114,7 +114,7 @@
 
                     <label>Máquina</label>
 
-                    <select name="id_maquina" required>
+                    <select disabled name="equipo_visual" required>
 
                         @foreach($maquinas as $maquina)
 
@@ -177,10 +177,12 @@
 
                 <div class="form-actions">
 
-                    <a href="{{ route('bajas_maquinas.index') }}"
+                    @can('bajas_maquinas.consultar')
+<a href="{{ route('bajas_maquinas.index') }}"
                        class="btn-cancelar">
                         Cancelar
                     </a>
+@endcan
 
                     <button type="submit"
                             class="btn-guardar">

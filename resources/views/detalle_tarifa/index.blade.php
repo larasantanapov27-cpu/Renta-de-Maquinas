@@ -15,10 +15,12 @@
             </p>
         </div>
 
-        <a href="{{ route('detalle_tarifa.create') }}"
+        @can('tarifas.registrar')
+<a href="{{ route('detalle_tarifa.create') }}"
            class="btn btn-dark">
             Nueva Tarifa
         </a>
+@endcan
 
     </div>
 
@@ -73,25 +75,14 @@
 
                                 <td class="text-center">
 
-                                    <a href="{{ route('detalle_tarifa.edit', $tarifa->id_tarifa) }}"
+                                    @can('tarifas.modificar')
+<a href="{{ route('detalle_tarifa.edit', $tarifa->id_tarifa) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar
                                     </a>
+@endcan
 
-                                    <form action="{{ route('detalle_tarifa.destroy', $tarifa->id_tarifa) }}"
-                                          method="POST"
-                                          class="d-inline">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('¿Deseas eliminar esta tarifa?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </td>
 

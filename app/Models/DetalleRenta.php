@@ -21,7 +21,7 @@ class DetalleRenta extends Model
         'precio_aplicado',
         'deposito_aplicado',
         'descuento',
-        'cargo_retraso',
+        'cargo_adicional',
         'cargo_danio',
         'fecha_devolucion_real',
         'observaciones',
@@ -32,7 +32,7 @@ class DetalleRenta extends Model
         'precio_aplicado' => 'decimal:2',
         'deposito_aplicado' => 'decimal:2',
         'descuento' => 'decimal:2',
-        'cargo_retraso' => 'decimal:2',
+        'cargo_adicional' => 'decimal:2',
         'cargo_danio' => 'decimal:2',
         'fecha_devolucion_real' => 'datetime',
     ];

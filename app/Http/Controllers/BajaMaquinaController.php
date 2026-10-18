@@ -56,17 +56,20 @@ class BajaMaquinaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'id_maquina' => 'required',
-            'id_motivo_baja' => 'required',
+        $data = $request->validate([
+            'id_maquina' => 'required|integer|exists:maquinas,id_maquina|unique:bajas_maquinas,id_maquina',
+            'id_motivo_baja' => 'required|integer|exists:motivos_baja,id_motivo_baja',
             'fecha_baja' => 'required|date',
-            'descripcion' => 'nullable'
+            'descripcion' => 'nullable|string'
         ]);
 
-        BajaMaquina::create($request->all());
+        DB::table('maquinas')->where('id_maquina',$data['id_maquina'])->lockForUpdate()->first();
+        abort_unless(\App\Services\EstadoEquipo::libre((int)$data['id_maquina']),422,'El equipo está rentado, en mantenimiento o ya dado de baja.');
+        BajaMaquina::create($data);
+        \App\Services\EstadoEquipo::cambiar((int)$data['id_maquina'],(int)DB::table('estados_maquina')->where('nombre','Baja')->value('id_estado_maquina'));
 
         return redirect()
-            ->route('bajas_maquinas.index');
+            ->route('panel');
     }
 
     public function edit($id)
@@ -89,10 +92,11 @@ class BajaMaquinaController extends Controller
     {
         $baja = BajaMaquina::findOrFail($id);
 
-        $baja->update($request->all());
+        $data=$request->validate(['id_maquina'=>'prohibited','id_motivo_baja'=>'required|integer|exists:motivos_baja,id_motivo_baja','fecha_baja'=>'required|date','descripcion'=>'nullable|string']);
+        $baja->update($data);
 
         return redirect()
-            ->route('bajas_maquinas.index');
+            ->route('panel');
     }
 
     public function destroy($id)
@@ -102,6 +106,6 @@ class BajaMaquinaController extends Controller
         $baja->delete();
 
         return redirect()
-            ->route('bajas_maquinas.index');
+            ->route('panel');
     }
 }

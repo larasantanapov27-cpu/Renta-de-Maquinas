@@ -57,7 +57,7 @@ class ComprasController extends Controller
         ]);
 
         return redirect()
-            ->route('compras.index')
+            ->route('panel')
             ->with('success', 'Compra registrada correctamente.');
     }
 
@@ -102,7 +102,7 @@ class ComprasController extends Controller
         ]);
 
         return redirect()
-            ->route('compras.index')
+            ->route('panel')
             ->with('success', 'Compra actualizada correctamente.');
     }
 
@@ -113,7 +113,7 @@ class ComprasController extends Controller
         $compra->delete();
 
         return redirect()
-            ->route('compras.index')
+            ->route('panel')
             ->with('success', 'Compra eliminada correctamente.');
     }
 }

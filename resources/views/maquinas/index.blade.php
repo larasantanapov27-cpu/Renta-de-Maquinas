@@ -13,9 +13,11 @@
         </p>
     </div>
 
-    <a href="{{ route('maquinas.create') }}" class="btn btn-dark">
+    @can('maquinas.registrar')
+<a href="{{ route('maquinas.create') }}" class="btn btn-dark">
         Nueva Máquina
     </a>
+@endcan
 
 </div>
 
@@ -82,32 +84,18 @@
                         </td>
 
                         <td class="text-center">
+@can('maquinas.cambiar_estado')<a class="btn btn-sm btn-secondary" href="{{ route('maquinas.estado_formulario',$maquina->id_maquina) }}">Cambiar estado</a>@endcan
 
-                            <a
+                            @can('maquinas.modificar')
+<a
                                 href="{{ route('maquinas.edit', $maquina->id_maquina) }}"
                                 class="btn btn-outline-dark btn-sm"
                             >
                                 Editar
                             </a>
+@endcan
 
-                            <form
-                                action="{{ route('maquinas.destroy', $maquina->id_maquina) }}"
-                                method="POST"
-                                class="d-inline"
-                                onsubmit="return confirm('¿Seguro que deseas eliminar esta máquina?');"
-                            >
 
-                                @csrf
-                                @method('DELETE')
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-outline-danger btn-sm"
-                                >
-                                    Eliminar
-                                </button>
-
-                            </form>
 
                         </td>
 

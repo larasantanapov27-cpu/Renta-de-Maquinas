@@ -69,12 +69,14 @@
                 Actualizar
             </button>
 
-            <a
+            @can('catalogos.consultar')
+<a
                 href="{{ route('estados_maquina.index') }}"
                 class="btn btn-secondary"
             >
                 Cancelar
             </a>
+@endcan
 
         </form>
 

@@ -35,8 +35,13 @@ class login extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            return redirect()->intended(route('panel'));
+            if (!\App\Services\Acceso::activo(Auth::user())) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors(['email' => 'Tu cuenta necesita aprobación y un rol activo para acceder.'])->onlyInput('email');
+            }
+            return redirect()->route(\App\Services\Acceso::inicio(Auth::user()));
         }
 
         return back()
@@ -124,13 +129,15 @@ class login extends Controller
         $user->name = $data['name'];
         $user->email = strtolower($data['email']);
         $user->password = Hash::make($data['password']);
+        $user->estado = 'pendiente';
+        $user->id_rol = null;
         $user->save();
 
         return redirect()
             ->route('login')
             ->with(
                 'success',
-                'Tu cuenta se creó correctamente. Ya puedes iniciar sesión.'
+                'Tu cuenta se creó correctamente. Necesita aprobación de un SuperAdmin antes de acceder.'
             );
     }
 

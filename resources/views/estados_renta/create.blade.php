@@ -77,12 +77,14 @@
                     </div>
 
                     <div class="d-flex flex-wrap justify-content-end gap-2">
-                        <a
+                        @can('catalogos.consultar')
+<a
                             href="{{ route('estados_renta.index') }}"
                             class="btn btn-outline-secondary rounded-pill px-4"
                         >
                             Cancelar
                         </a>
+@endcan
 
                         <button type="submit" class="boton-principal">
                             Guardar estado
