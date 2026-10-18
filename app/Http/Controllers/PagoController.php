@@ -95,7 +95,7 @@ class PagoController extends Controller
         );
 
         return redirect()
-            ->route('pagos.index')
+            ->route('panel')
             ->with(
                 'success',
                 'Pago registrado correctamente.'
@@ -160,7 +160,7 @@ class PagoController extends Controller
         );
 
         return redirect()
-            ->route('pagos.index')
+            ->route('panel')
             ->with(
                 'success',
                 'Pago actualizado correctamente.'
@@ -176,7 +176,7 @@ class PagoController extends Controller
         $pago->delete();
 
         return redirect()
-            ->route('pagos.index')
+            ->route('panel')
             ->with(
                 'success',
                 'Pago eliminado correctamente.'

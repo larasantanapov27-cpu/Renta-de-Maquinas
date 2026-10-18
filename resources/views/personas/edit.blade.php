@@ -67,10 +67,12 @@
                     Actualizar
                 </button>
 
-                <a href="{{ route('personas.index') }}"
+                @can('personas.consultar')
+<a href="{{ route('personas.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

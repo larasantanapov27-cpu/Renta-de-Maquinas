@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class MotivoBajaController extends Controller
 {
+    public function index() { return view('accesos.catalogo',['registros'=>\Illuminate\Support\Facades\DB::table('motivos_baja')->get(),'modulo'=>'motivos_baja','llave'=>'id_motivo_baja']); }
+
     public function create()
     {
         return view('motivos_baja.create');
@@ -19,10 +21,10 @@ class MotivoBajaController extends Controller
             'descripcion' => 'nullable|max:255'
         ]);
 
-        MotivoBaja::create($request->all());
+        MotivoBaja::create($request->only(['nombre','descripcion']));
 
         return redirect()
-            ->route('bajas_maquinas.index');
+            ->route('panel');
     }
 
     public function edit($id)
@@ -39,10 +41,11 @@ class MotivoBajaController extends Controller
     {
         $motivo = MotivoBaja::findOrFail($id);
 
-        $motivo->update($request->all());
+        $data = $request->validate(['nombre'=>'required|string|max:100','descripcion'=>'nullable|string|max:255']);
+        $motivo->update($data);
 
         return redirect()
-            ->route('bajas_maquinas.index');
+            ->route('panel');
     }
 
     public function destroy($id)
@@ -52,6 +55,6 @@ class MotivoBajaController extends Controller
         $motivo->delete();
 
         return redirect()
-            ->route('bajas_maquinas.index');
+            ->route('panel');
     }
 }

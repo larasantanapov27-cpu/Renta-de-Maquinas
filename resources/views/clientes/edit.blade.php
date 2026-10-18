@@ -20,31 +20,7 @@
                 @csrf
                 @method('PUT')
 
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Persona
-                    </label>
-
-                    <select name="id_persona"
-                            class="form-select"
-                            required>
-
-                        @foreach($personas as $persona)
-
-                            <option value="{{ $persona->id_persona }}"
-                                {{ $cliente->id_persona == $persona->id_persona ? 'selected' : '' }}>
-
-                                {{ $persona->nombre }}
-                                {{ $persona->apellidos }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
+                @include('accesos.persona')
 
                 <div class="mb-3">
 
@@ -65,10 +41,12 @@
                     Actualizar
                 </button>
 
-                <a href="{{ route('clientes.index') }}"
+                @can('clientes.consultar')
+<a href="{{ route('clientes.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

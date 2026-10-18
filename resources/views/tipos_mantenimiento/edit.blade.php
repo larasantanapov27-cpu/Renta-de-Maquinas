@@ -60,10 +60,12 @@
 
         <div class="d-flex justify-content-end gap-2">
 
-            <a href="{{ route('mantenimientos.index') }}#tipos"
+            @can('mantenimientos.consultar')
+<a href="{{ route('mantenimientos.index') }}#tipos"
                class="btn btn-light rounded-pill px-4">
                 Cancelar
             </a>
+@endcan
 
             <button
                 type="submit"

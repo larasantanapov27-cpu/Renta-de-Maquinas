@@ -127,10 +127,12 @@
                     Guardar
                 </button>
 
-                <a href="{{ route('direcciones_clientes.index') }}"
+                @can('clientes.consultar')
+<a href="{{ route('direcciones_clientes.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

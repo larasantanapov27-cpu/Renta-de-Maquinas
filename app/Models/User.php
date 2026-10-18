@@ -10,6 +10,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public function rol() { return $this->belongsTo(Rol::class, 'id_rol', 'id_rol'); }
+
+    public function tienePermiso(string $clave): bool { return \App\Services\Acceso::permite($this, $clave); }
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 

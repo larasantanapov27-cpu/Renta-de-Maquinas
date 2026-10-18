@@ -32,7 +32,7 @@ class EstadoMaquinaController extends Controller
         ]);
 
         return redirect()
-            ->route('estados_maquina.index')
+            ->route('panel')
             ->with('success', 'Estado de máquina registrado correctamente.');
     }
 
@@ -52,13 +52,14 @@ class EstadoMaquinaController extends Controller
             'descripcion' => 'nullable|string'
         ]);
 
+        abort_if($request->nombre !== $estado->nombre,422,'Los nombres de estados operativos se conservan para proteger las reglas del negocio.');
         $estado->update([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion
         ]);
 
         return redirect()
-            ->route('estados_maquina.index')
+            ->route('panel')
             ->with('success', 'Estado de máquina actualizado correctamente.');
     }
 
@@ -69,7 +70,7 @@ class EstadoMaquinaController extends Controller
         $estado->delete();
 
         return redirect()
-            ->route('estados_maquina.index')
+            ->route('panel')
             ->with('success', 'Estado de máquina eliminado correctamente.');
     }
 }

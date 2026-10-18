@@ -141,10 +141,12 @@
                     Actualizar
                 </button>
 
-                <a href="{{ route('pagos.index') }}"
+                @can('pagos.consultar')
+<a href="{{ route('pagos.index') }}"
                    class="btn btn-secondary">
                     Cancelar
                 </a>
+@endcan
 
             </form>
 

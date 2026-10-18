@@ -30,6 +30,7 @@ class DireccionClienteController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(['id_cliente'=>'required|integer|exists:clientes,id_cliente','calle'=>'required|string|max:150','numero_exterior'=>'nullable|string|max:20','numero_interior'=>'nullable|string|max:20','colonia'=>'nullable|string|max:100','municipio'=>'nullable|string|max:100','estado'=>'nullable|string|max:100','codigo_postal'=>'nullable|string|max:10']);
         DireccionCliente::create([
             'id_cliente' => $request->id_cliente,
             'calle' => $request->calle,
@@ -62,6 +63,7 @@ class DireccionClienteController extends Controller
     {
         $direccion = DireccionCliente::findOrFail($id);
 
+        $request->validate(['id_cliente'=>'required|integer|exists:clientes,id_cliente','calle'=>'required|string|max:150','numero_exterior'=>'nullable|string|max:20','numero_interior'=>'nullable|string|max:20','colonia'=>'nullable|string|max:100','municipio'=>'nullable|string|max:100','estado'=>'nullable|string|max:100','codigo_postal'=>'nullable|string|max:10']);
         $direccion->update([
             'id_cliente' => $request->id_cliente,
             'calle' => $request->calle,

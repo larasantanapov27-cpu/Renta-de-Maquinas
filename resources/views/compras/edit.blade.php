@@ -194,12 +194,14 @@
                     Actualizar
                 </button>
 
-                <a
+                @can('compras.consultar')
+<a
                     href="{{ route('compras.index') }}"
                     class="btn btn-secondary"
                 >
                     Cancelar
                 </a>
+@endcan
 
             </div>
 

@@ -114,28 +114,8 @@
                             Estado de máquina
                         </label>
 
-                        <select
-                            name="id_estado_maquina"
-                            class="form-select"
-                            required
-                        >
-
-                            <option value="">
-                                Selecciona un estado
-                            </option>
-
-                            @foreach($estadosMaquina as $estado)
-
-                                <option
-                                    value="{{ $estado->id_estado_maquina }}"
-                                    {{ old('id_estado_maquina') == $estado->id_estado_maquina ? 'selected' : '' }}
-                                >
-                                    {{ $estado->nombre }}
-                                </option>
-
-                            @endforeach
-
-                        </select>
+                        <input type="hidden" name="id_estado_maquina" value="{{ $estadosMaquina->firstWhere('nombre','Disponible')?->id_estado_maquina }}">
+<p>Estado inicial: Disponible.</p>
 
                     </div>
 
@@ -262,12 +242,14 @@
                     </button>
 
 
-                    <a
+                    @can('maquinas.consultar')
+<a
                         href="{{ route('maquinas.index') }}"
                         class="btn btn-secondary"
                     >
                         Cancelar
                     </a>
+@endcan
 
                 </div>
 

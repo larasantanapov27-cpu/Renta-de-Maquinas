@@ -74,7 +74,7 @@ class DetalleTarifaController extends Controller
         ]));
 
         return redirect()
-            ->route('detalle_tarifa.index')
+            ->route('panel')
             ->with('success', 'Tarifa registrada correctamente.');
     }
 
@@ -121,7 +121,7 @@ class DetalleTarifaController extends Controller
         ]));
 
         return redirect()
-            ->route('detalle_tarifa.index')
+            ->route('panel')
             ->with('success', 'Tarifa actualizada correctamente.');
     }
 
@@ -132,7 +132,7 @@ class DetalleTarifaController extends Controller
         $tarifa->delete();
 
         return redirect()
-            ->route('detalle_tarifa.index')
+            ->route('panel')
             ->with('success', 'Tarifa eliminada correctamente.');
     }
 }

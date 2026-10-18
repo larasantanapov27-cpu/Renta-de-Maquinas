@@ -15,10 +15,12 @@
             </p>
         </div>
 
-        <a href="{{ route('clientes.create') }}"
+        @can('clientes.registrar')
+<a href="{{ route('clientes.create') }}"
            class="btn btn-dark">
             Nuevo Cliente
         </a>
+@endcan
 
     </div>
 
@@ -73,25 +75,14 @@
 
                                 <td class="text-center">
 
-                                    <a href="{{ route('clientes.edit', $cliente->id_cliente) }}"
+                                    @can('clientes.modificar')
+<a href="{{ route('clientes.edit', $cliente->id_cliente) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar
                                     </a>
+@endcan
 
-                                    <form action="{{ route('clientes.destroy', $cliente->id_cliente) }}"
-                                          method="POST"
-                                          class="d-inline">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('¿Deseas eliminar este cliente?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </td>
 

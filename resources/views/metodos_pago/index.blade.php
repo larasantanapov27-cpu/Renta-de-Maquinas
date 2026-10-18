@@ -15,10 +15,12 @@
             </p>
         </div>
 
-        <a href="{{ route('metodos_pago.create') }}"
+        @can('catalogos.registrar')
+<a href="{{ route('metodos_pago.create') }}"
            class="btn btn-dark">
             Nuevo Método
         </a>
+@endcan
 
     </div>
 
@@ -72,25 +74,14 @@
 
                                 <td class="text-center">
 
-                                    <a href="{{ route('metodos_pago.edit', $metodo->id_metodo_pago) }}"
+                                    @can('catalogos.modificar')
+<a href="{{ route('metodos_pago.edit', $metodo->id_metodo_pago) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar
                                     </a>
+@endcan
 
-                                    <form action="{{ route('metodos_pago.destroy', $metodo->id_metodo_pago) }}"
-                                          method="POST"
-                                          class="d-inline">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger"
-                                                onclick="return confirm('¿Deseas eliminar este método de pago?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </td>
 
@@ -119,10 +110,12 @@
 
         <div class="card-footer">
 
-            <a href="{{ route('pagos.index') }}"
+            @can('pagos.consultar')
+<a href="{{ route('pagos.index') }}"
                class="btn btn-secondary">
                 Regresar a Pagos
             </a>
+@endcan
 
         </div>
 

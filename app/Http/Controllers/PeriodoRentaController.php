@@ -32,7 +32,7 @@ class PeriodoRentaController extends Controller
         ]);
 
         return redirect()
-            ->route('periodos_renta.index')
+            ->route('panel')
             ->with('success', 'Período registrado correctamente.');
     }
 
@@ -61,7 +61,7 @@ class PeriodoRentaController extends Controller
             ]);
 
         return redirect()
-            ->route('periodos_renta.index')
+            ->route('panel')
             ->with('success', 'Período actualizado correctamente.');
     }
 
@@ -73,7 +73,7 @@ class PeriodoRentaController extends Controller
 
         if ($usado) {
             return redirect()
-                ->route('periodos_renta.index')
+                ->route('panel')
                 ->with(
                     'error',
                     'No se puede eliminar porque el período está siendo utilizado en una tarifa.'
@@ -85,7 +85,7 @@ class PeriodoRentaController extends Controller
             ->delete();
 
         return redirect()
-            ->route('periodos_renta.index')
+            ->route('panel')
             ->with('success', 'Período eliminado correctamente.');
     }
-} 
+}

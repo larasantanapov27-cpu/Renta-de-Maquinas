@@ -29,37 +29,7 @@
 
                     {{-- PERSONA --}}
 
-                    <div class="mb-3">
-
-                        <label for="id_persona"
-                               class="form-label">
-                            Persona
-                        </label>
-
-                        <select name="id_persona"
-                                id="id_persona"
-                                class="form-select"
-                                required>
-
-                            <option value="">
-                                Seleccione una persona
-                            </option>
-
-                            @foreach($personas as $persona)
-
-                                <option value="{{ $persona->id_persona }}"
-                                    {{ old('id_persona') == $persona->id_persona ? 'selected' : '' }}>
-
-                                    {{ $persona->nombre }}
-                                    {{ $persona->apellidos }}
-
-                                </option>
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
+                    @include('accesos.persona')
 
 
                     {{-- RFC --}}
@@ -128,10 +98,12 @@
                             Guardar
                         </button>
 
-                        <a href="{{ route('proveedores.index') }}"
+                        @can('proveedores.consultar')
+<a href="{{ route('proveedores.index') }}"
                            class="btn btn-secondary">
                             Cancelar
                         </a>
+@endcan
 
                     </div>
 

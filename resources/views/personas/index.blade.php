@@ -101,10 +101,12 @@
                 </p>
             </div>
 
-            <a href="{{ route('personas.create') }}"
+            @can('personas.registrar')
+<a href="{{ route('personas.create') }}"
                class="btn btn-nuevo">
                 Nueva Persona
             </a>
+@endcan
 
         </div>
 
@@ -156,25 +158,14 @@
 
                             <td class="text-center">
 
-                                <a href="{{ route('personas.edit', $persona->id_persona) }}"
+                                @can('personas.modificar')
+<a href="{{ route('personas.edit', $persona->id_persona) }}"
                                    class="btn btn-sm btn-outline-dark">
                                     Editar
                                 </a>
+@endcan
 
-                                <form action="{{ route('personas.destroy', $persona->id_persona) }}"
-                                      method="POST"
-                                      class="d-inline">
 
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit"
-                                            class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('¿Deseas eliminar esta persona?')">
-                                        Eliminar
-                                    </button>
-
-                                </form>
 
                             </td>
 

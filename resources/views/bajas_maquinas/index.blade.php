@@ -156,10 +156,12 @@
             <p>Administración de máquinas dadas de baja.</p>
         </div>
 
-        <a href="{{ route('bajas_maquinas.create') }}"
+        @can('bajas_maquinas.registrar')
+<a href="{{ route('bajas_maquinas.create') }}"
            class="boton-nuevo">
             + Nueva baja
         </a>
+@endcan
 
     </div>
 
@@ -227,24 +229,14 @@
 
                                 <div class="acciones">
 
-                                    <a href="{{ route('bajas_maquinas.edit', $baja->id_baja) }}"
+                                    @can('bajas_maquinas.modificar')
+<a href="{{ route('bajas_maquinas.edit', $baja->id_baja) }}"
                                        class="btn-editar">
                                         Editar
                                     </a>
+@endcan
 
-                                    <form action="{{ route('bajas_maquinas.destroy', $baja->id_baja) }}"
-                                          method="POST">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn-eliminar"
-                                                onclick="return confirm('¿Eliminar esta baja?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </div>
 
@@ -290,10 +282,12 @@
 
             </div>
 
-            <a href="{{ route('motivos_baja.create') }}"
+            @can('catalogos.registrar')
+<a href="{{ route('motivos_baja.create') }}"
                class="boton-nuevo">
                 + Nuevo motivo
             </a>
+@endcan
 
         </div>
 
@@ -335,24 +329,14 @@
 
                                 <div class="acciones">
 
-                                    <a href="{{ route('motivos_baja.edit', $motivo->id_motivo_baja) }}"
+                                    @can('catalogos.modificar')
+<a href="{{ route('motivos_baja.edit', $motivo->id_motivo_baja) }}"
                                        class="btn-editar">
                                         Editar
                                     </a>
+@endcan
 
-                                    <form action="{{ route('motivos_baja.destroy', $motivo->id_motivo_baja) }}"
-                                          method="POST">
 
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn-eliminar"
-                                                onclick="return confirm('¿Eliminar este motivo?')">
-                                            Eliminar
-                                        </button>
-
-                                    </form>
 
                                 </div>
 
