@@ -237,7 +237,6 @@ Route::middleware(['auth','acceso'])->group(function () {
         'tipos-mantenimiento',
         TipoMantenimientoController::class
     )
-        ->except(['show'])
         ->names('tipos_mantenimiento');
 
 
@@ -264,7 +263,6 @@ Route::middleware(['auth','acceso'])->group(function () {
         'motivos-baja',
         MotivoBajaController::class
     )
-        ->except(['show'])
         ->names('motivos_baja');
 
 
@@ -315,7 +313,6 @@ Route::middleware(['auth','acceso'])->group(function () {
         'estados_renta',
         EstadoRentaController::class
     )
-        ->except(['show'])
         ->parameters([
             'estados_renta' => 'estadoRenta',
         ]);

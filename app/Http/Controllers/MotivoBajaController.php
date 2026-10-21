@@ -24,7 +24,7 @@ class MotivoBajaController extends Controller
         MotivoBaja::create($request->only(['nombre','descripcion']));
 
         return redirect()
-            ->route('panel');
+            ->route('panel')->with('success','Motivo de baja guardado.');
     }
 
     public function edit($id)
@@ -45,16 +45,11 @@ class MotivoBajaController extends Controller
         $motivo->update($data);
 
         return redirect()
-            ->route('panel');
+            ->route('panel')->with('success','Motivo de baja guardado.');
     }
 
     public function destroy($id)
     {
-        $motivo = MotivoBaja::findOrFail($id);
-
-        $motivo->delete();
-
-        return redirect()
-            ->route('panel');
+        return \App\Services\RegistroCrud::borrar('motivos_baja', (int)$id);
     }
 }

@@ -164,22 +164,26 @@ class RentaController extends Controller
             'detalles.*.cantidad_periodos'=>'required|numeric|min:0.01|max:999999.99',
         ]);
         $detalles=$data['detalles']; unset($data['detalles']);
-        $ids=collect($detalles)->pluck('id_maquina')->sort()->values();
-        $maquinas=DB::table('maquinas')->whereIn('id_maquina',$ids)->orderBy('id_maquina')->lockForUpdate()->get()->keyBy('id_maquina');
-        $estado=DB::table('estados_renta')->where('nombre','Activa')->value('id_estado_renta');
-        $rentada=DB::table('estados_maquina')->where('nombre','Rentada')->value('id_estado_maquina');
-        abort_unless($estado && $rentada,422,'Faltan estados del catálogo.');
-        $id=DB::table('rentas')->insertGetId($data+['id_estado_renta'=>$estado,'fecha_registro'=>now()]);
-        foreach($detalles as $detalle) {
-            $maquina=$maquinas[$detalle['id_maquina']];
-            $disponible=DB::table('estados_maquina')->where('id_estado_maquina',$maquina->id_estado_maquina)->value('nombre')==='Disponible';
-            if (!$disponible || !\App\Services\EstadoEquipo::libre($maquina->id_maquina)) throw \Illuminate\Validation\ValidationException::withMessages(['detalles'=>'Una máquina ya no está disponible.']);
-            $tarifa=DB::table('detalle_tarifa')->where('id_tarifa',$detalle['id_tarifa'])->where('id_tipo_maquina',$maquina->id_tipo_maquina)->where('fecha_inicio','<=',substr($data['fecha_salida'],0,10))->where(fn($q)=>$q->whereNull('fecha_fin')->orWhere('fecha_fin','>=',substr($data['fecha_salida'],0,10)))->first();
-            if (!$tarifa) throw \Illuminate\Validation\ValidationException::withMessages(['detalles'=>'La tarifa no corresponde a la máquina o no está vigente.']);
-            DB::table('detalle_rentas')->insert($detalle+['id_renta'=>$id,'precio_aplicado'=>$tarifa->precio,'deposito_aplicado'=>$tarifa->deposito]);
-            DB::table('maquinas')->where('id_maquina',$maquina->id_maquina)->update(['id_estado_maquina'=>$rentada]);
-        }
-        return redirect()->route('panel')->with('success','Renta registrada con sus detalles.');
+        return \App\Services\TransaccionSql::ejecutar(['rentas','detalle_rentas','maquinas','clientes','detalle_tarifa','estados_renta','estados_maquina','mantenimientos','bajas_maquinas'], function () use ($data, $detalles) {
+            abort_unless(DB::table('clientes')->where('id_cliente',$data['id_cliente'])->lockForUpdate()->exists(),422,'El cliente ya no existe.');
+            $ids=collect($detalles)->pluck('id_maquina')->sort()->values();
+            $maquinas=DB::table('maquinas')->whereIn('id_maquina',$ids)->orderBy('id_maquina')->lockForUpdate()->get()->keyBy('id_maquina');
+            $estado=DB::table('estados_renta')->where('nombre','Activa')->value('id_estado_renta');
+            $rentada=DB::table('estados_maquina')->where('nombre','Rentada')->value('id_estado_maquina');
+            abort_unless($estado && $rentada,422,'Faltan estados del catálogo.');
+            $id=DB::table('rentas')->insertGetId($data+['id_estado_renta'=>$estado,'fecha_registro'=>now()]);
+            foreach($detalles as $detalle) {
+                $maquina=$maquinas->get($detalle['id_maquina']);
+                abort_unless($maquina,422,'Una máquina ya no existe.');
+                $disponible=DB::table('estados_maquina')->where('id_estado_maquina',$maquina->id_estado_maquina)->value('nombre')==='Disponible';
+                if (!$disponible || !\App\Services\EstadoEquipo::libre($maquina->id_maquina)) throw \Illuminate\Validation\ValidationException::withMessages(['detalles'=>'Una máquina ya no está disponible.']);
+                $tarifa=DB::table('detalle_tarifa')->where('id_tarifa',$detalle['id_tarifa'])->where('id_tipo_maquina',$maquina->id_tipo_maquina)->where('fecha_inicio','<=',substr($data['fecha_salida'],0,10))->where(fn($q)=>$q->whereNull('fecha_fin')->orWhere('fecha_fin','>=',substr($data['fecha_salida'],0,10)))->lockForUpdate()->first();
+                if (!$tarifa) throw \Illuminate\Validation\ValidationException::withMessages(['detalles'=>'La tarifa no corresponde a la máquina o no está vigente.']);
+                DB::table('detalle_rentas')->insert($detalle+['id_renta'=>$id,'precio_aplicado'=>$tarifa->precio,'deposito_aplicado'=>$tarifa->deposito]);
+                DB::table('maquinas')->where('id_maquina',$maquina->id_maquina)->update(['id_estado_maquina'=>$rentada]);
+            }
+            return redirect()->route('panel')->with('success','Renta registrada con sus detalles.');
+        });
     }
     public function edit($id)
     {
@@ -188,8 +192,7 @@ class RentaController extends Controller
     }
     public function show($id)
     {
-        $renta=Renta::with(['detalles','estado'])->findOrFail($id);
-        return view('rentas.detalles',compact('renta'));
+        return parent::show($id);
     }
     public function update(Request $request,$id)
     {
@@ -208,23 +211,25 @@ class RentaController extends Controller
     public function devolver(Request $request,$id)
     {
         $data=$request->validate(['detalles'=>'required|array|min:1','detalles.*'=>'integer|distinct','fecha_devolucion_real'=>'required|date|before_or_equal:now']);
-        // Lock machines before the rental to share lock order with maintenance and machine changes.
-        $ids=DB::table('detalle_rentas')->where('id_renta',$id)->pluck('id_maquina');
-        DB::table('maquinas')->whereIn('id_maquina',$ids)->orderBy('id_maquina')->lockForUpdate()->get();
-        $renta=Renta::lockForUpdate()->findOrFail($id);
-        abort_unless($renta->estado->nombre==='Activa',422,'Solo se devuelven rentas activas.');
-        abort_unless(\Illuminate\Support\Carbon::parse($data['fecha_devolucion_real'])->gte($renta->fecha_salida),422,'La devolución no puede preceder la salida.');
-        $detalles=DB::table('detalle_rentas')->where('id_renta',$id)->whereIn('id_detalle_renta',$data['detalles'])->whereNull('fecha_devolucion_real')->lockForUpdate()->get();
-        abort_unless($detalles->count()===count($data['detalles']),422,'Detalles inválidos o ya devueltos.');
-        foreach($detalles as $detalle) {
-            DB::table('detalle_rentas')->where('id_detalle_renta',$detalle->id_detalle_renta)->update(['fecha_devolucion_real'=>$data['fecha_devolucion_real']]);
-            if (\App\Services\EstadoEquipo::libre($detalle->id_maquina)) {
-                $disponible=DB::table('estados_maquina')->where('nombre','Disponible')->value('id_estado_maquina');
-                \App\Services\EstadoEquipo::cambiar($detalle->id_maquina,$disponible);
+        return \App\Services\TransaccionSql::ejecutar(['rentas','detalle_rentas','maquinas','estados_renta','estados_maquina','mantenimientos','bajas_maquinas'], function () use ($data, $id) {
+            // Lock machines before the rental to share lock order with maintenance and machine changes.
+            $ids=DB::table('detalle_rentas')->where('id_renta',$id)->pluck('id_maquina');
+            DB::table('maquinas')->whereIn('id_maquina',$ids)->orderBy('id_maquina')->lockForUpdate()->get();
+            $renta=Renta::lockForUpdate()->findOrFail($id);
+            abort_unless($renta->estado->nombre==='Activa',422,'Solo se devuelven rentas activas.');
+            abort_unless(\Illuminate\Support\Carbon::parse($data['fecha_devolucion_real'])->gte($renta->fecha_salida),422,'La devolución no puede preceder la salida.');
+            $detalles=DB::table('detalle_rentas')->where('id_renta',$id)->whereIn('id_detalle_renta',$data['detalles'])->whereNull('fecha_devolucion_real')->lockForUpdate()->get();
+            abort_unless($detalles->count()===count($data['detalles']),422,'Detalles inválidos o ya devueltos.');
+            foreach($detalles as $detalle) {
+                DB::table('detalle_rentas')->where('id_detalle_renta',$detalle->id_detalle_renta)->update(['fecha_devolucion_real'=>$data['fecha_devolucion_real']]);
+                if (\App\Services\EstadoEquipo::libre($detalle->id_maquina)) {
+                    $disponible=DB::table('estados_maquina')->where('nombre','Disponible')->value('id_estado_maquina');
+                    \App\Services\EstadoEquipo::cambiar($detalle->id_maquina,$disponible);
+                }
             }
-        }
-        if (!DB::table('detalle_rentas')->where('id_renta',$id)->whereNull('fecha_devolucion_real')->exists()) $renta->update(['id_estado_renta'=>DB::table('estados_renta')->where('nombre','Finalizada')->value('id_estado_renta')]);
-        return redirect()->route('panel')->with('success','Devolución registrada.');
+            if (!DB::table('detalle_rentas')->where('id_renta',$id)->whereNull('fecha_devolucion_real')->exists()) $renta->update(['id_estado_renta'=>DB::table('estados_renta')->where('nombre','Finalizada')->value('id_estado_renta')]);
+            return redirect()->route('panel')->with('success','Devolución registrada.');
+        });
     }
 
 }

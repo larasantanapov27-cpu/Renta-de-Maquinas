@@ -147,12 +147,6 @@ class MaquinaController extends Controller
 
     public function destroy($id)
     {
-        $maquina = Maquina::findOrFail($id);
-
-        $maquina->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Máquina eliminada correctamente.');
+        return \App\Services\RegistroCrud::borrar('maquinas', (int)$id);
     }
 }

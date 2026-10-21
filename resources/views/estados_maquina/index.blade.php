@@ -76,7 +76,8 @@
 
                         <td class="text-center">
 
-                            @can('catalogos.modificar')
+                            @include('crud.acciones', ['modulo'=>'estados_maquina', 'id'=>$estado->id_estado_maquina])
+@can('catalogos.modificar')
 <a
                                 href="{{ route('estados_maquina.edit', $estado->id_estado_maquina) }}"
                                 class="btn btn-outline-dark btn-sm"

@@ -74,7 +74,8 @@
 
                                 <td class="text-center">
 
-                                    @can('catalogos.modificar')
+                                    @include('crud.acciones', ['modulo'=>'metodos_pago', 'id'=>$metodo->id_metodo_pago])
+@can('catalogos.modificar')
 <a href="{{ route('metodos_pago.edit', $metodo->id_metodo_pago) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar

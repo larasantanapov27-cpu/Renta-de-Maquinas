@@ -95,7 +95,8 @@
 
                                     <div class="d-flex gap-2">
 
-                                        @can('clientes.modificar')
+                                        @include('crud.acciones', ['modulo'=>'direcciones_clientes', 'id'=>$direccion->id_direccion])
+@can('clientes.modificar')
 <a href="{{ route('direcciones_clientes.edit', $direccion->id_direccion) }}"
                                            class="btn btn-sm btn-outline-dark">
                                             Editar

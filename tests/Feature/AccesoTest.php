@@ -101,7 +101,8 @@ class AccesoTest extends TestCase
     {
         $this->actingAs($this->usuario())->put('/accesos/permisos/2',['permisos'=>[1]])->assertUnprocessable();
         $this->put('/accesos/permisos/2',['permisos'=>[9999]])->assertSessionHasErrors('permisos.0');
-        $this->put('/accesos/permisos/2',['permisos'=>[12]])->assertUnprocessable();
+        $this->put('/accesos/permisos/2',['permisos'=>[16]])->assertUnprocessable();
+        $this->put('/accesos/permisos/2',['permisos'=>[12]])->assertRedirect()->assertSessionHas('success');
     }
     public function test_matriz_y_pantallas_de_seguridad(): void
     {
@@ -152,9 +153,10 @@ class AccesoTest extends TestCase
         $this->equipo(); $this->permiso(2,'rentas.registrar'); $this->actingAs($this->usuario(2))->post('/rentas',['id_cliente'=>1,'fecha_salida'=>'2026-01-02 10:00:00','fecha_devolucion_programada'=>'2026-01-03 10:00:00','detalles'=>[['id_maquina'=>1,'id_tarifa'=>1,'cantidad_periodos'=>1]]])->assertRedirect();
         $this->assertEquals(100,DB::table('detalle_rentas')->value('precio_aplicado')); $this->assertSame(2,DB::table('maquinas')->value('id_estado_maquina'));
     }
-    public function test_eliminaciones_siempre_bloqueadas(): void
+    public function test_eliminacion_exige_permiso_y_registro_existente(): void
     {
-        $user=$this->usuario(2); $this->permiso(2,'clientes.eliminar'); $this->actingAs($user)->delete('/clientes/1')->assertForbidden();
+        $user=$this->usuario(2); $this->actingAs($user)->delete('/clientes/1')->assertForbidden();
+        $this->permiso(2,'clientes.eliminar'); $this->delete('/clientes/1')->assertNotFound();
     }
     public function test_listados_y_formularios_existentes_se_integran(): void
     {
@@ -177,7 +179,7 @@ class AccesoTest extends TestCase
     public function test_mantenimiento_y_baja_respetan_ocupacion_y_transacciones(): void
     {
         $this->renta(); $user=$this->usuario(3); $this->permiso(3,'mantenimientos.registrar'); $this->permiso(3,'bajas_maquinas.registrar'); $this->actingAs($user);
-        $this->post('/mantenimientos',['id_maquina'=>1,'id_tipo_mantenimiento'=>1,'fecha_entrada'=>'2026-01-03','descripcion'=>'Prueba'])->assertUnprocessable();
+        $this->post('/mantenimientos',['id_maquina'=>1,'id_tipo_mantenimiento'=>1,'fecha_entrada'=>'2026-01-03','descripcion'=>'Prueba'])->assertSessionHasErrors('operacion');
         $this->post('/bajas-maquinas',['id_maquina'=>1,'id_motivo_baja'=>1,'fecha_baja'=>'2026-01-03'])->assertUnprocessable();
         $this->assertSame(0,DB::table('mantenimientos')->count()); $this->assertSame(0,DB::table('bajas_maquinas')->count());
         DB::table('detalle_rentas')->update(['fecha_devolucion_real'=>'2026-01-03']); DB::table('rentas')->update(['id_estado_renta'=>3]); DB::table('maquinas')->update(['id_estado_maquina'=>1]);

@@ -60,36 +60,9 @@ class EstadoRentaController extends Controller
     }
 
     // Eliminar un estado que no esté en uso.
-    public function destroy(EstadoRenta $estadoRenta)
+    public function destroy($id)
     {
-        if ($estadoRenta->rentas()->exists()) {
-            return redirect()
-                ->route('panel')
-                ->with(
-                    'error',
-                    'No puedes eliminar este estado porque tiene rentas asociadas.'
-                );
-        }
-
-        try {
-            $estadoRenta->delete();
-        } catch (QueryException $exception) {
-            // MySQL/MariaDB: una llave foránea impide la eliminación.
-            if ((int) ($exception->errorInfo[1] ?? 0) === 1451) {
-                return redirect()
-                    ->route('panel')
-                    ->with(
-                        'error',
-                        'No puedes eliminar este estado porque tiene registros asociados.'
-                    );
-            }
-
-            throw $exception;
-        }
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'El estado de renta se eliminó correctamente.');
+        return \App\Services\RegistroCrud::borrar('estados_renta', (int)$id);
     }
 
     // Validaciones compartidas por registro y edición.

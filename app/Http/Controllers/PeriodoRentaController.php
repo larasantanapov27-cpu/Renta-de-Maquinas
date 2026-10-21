@@ -67,25 +67,6 @@ class PeriodoRentaController extends Controller
 
     public function destroy($id)
     {
-        $usado = DB::table('detalle_tarifa')
-            ->where('id_periodo', $id)
-            ->exists();
-
-        if ($usado) {
-            return redirect()
-                ->route('panel')
-                ->with(
-                    'error',
-                    'No se puede eliminar porque el período está siendo utilizado en una tarifa.'
-                );
-        }
-
-        DB::table('periodos_renta')
-            ->where('id_periodo', $id)
-            ->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Período eliminado correctamente.');
+        return \App\Services\RegistroCrud::borrar('periodos_renta', (int)$id);
     }
 }

@@ -90,7 +90,8 @@
 
                                 <td class="text-center">
 
-                                    @can('proveedores.modificar')
+                                    @include('crud.acciones', ['modulo'=>'proveedores', 'id'=>$proveedor->id_proveedor])
+@can('proveedores.modificar')
 <a href="{{ route('proveedores.edit', $proveedor->id_proveedor) }}"
                                        class="btn btn-primary btn-sm">
                                         Editar

@@ -128,11 +128,6 @@ class DetalleTarifaController extends Controller
     // Eliminar tarifa
     public function destroy($id)
     {
-        $tarifa = DetalleTarifa::findOrFail($id);
-        $tarifa->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Tarifa eliminada correctamente.');
+        return \App\Services\RegistroCrud::borrar('detalle_tarifa', (int)$id);
     }
 }

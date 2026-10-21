@@ -44,7 +44,7 @@ class DireccionClienteController extends Controller
 
         return redirect()->route(
             'direcciones_clientes.index'
-        );
+        )->with('success','Dirección guardada correctamente.');
     }
 
     public function edit($id)
@@ -77,17 +77,11 @@ class DireccionClienteController extends Controller
 
         return redirect()->route(
             'direcciones_clientes.index'
-        );
+        )->with('success','Dirección guardada correctamente.');
     }
 
     public function destroy($id)
     {
-        $direccion = DireccionCliente::findOrFail($id);
-
-        $direccion->delete();
-
-        return redirect()->route(
-            'direcciones_clientes.index'
-        );
+        return \App\Services\RegistroCrud::borrar('direcciones_clientes', (int)$id);
     }
 }

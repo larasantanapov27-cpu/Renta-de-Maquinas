@@ -55,7 +55,8 @@
 
                             <td>
                                 <div class="d-flex justify-content-end gap-2">
-                                    @can('catalogos.modificar')
+                                    @include('crud.acciones', ['modulo'=>'estados_renta', 'id'=>$estado])
+@can('catalogos.modificar')
 <a
                                         href="{{ route('estados_renta.edit', $estado) }}"
                                         class="btn btn-outline-dark btn-sm"

@@ -56,7 +56,8 @@
 
                                 <td class="text-center">
 
-                                    @can('catalogos.modificar')
+                                    @include('crud.acciones', ['modulo'=>'periodos_renta', 'id'=>$periodo->id_periodo])
+@can('catalogos.modificar')
 <a href="{{ route('periodos_renta.edit', $periodo->id_periodo) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar

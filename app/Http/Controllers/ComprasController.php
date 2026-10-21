@@ -108,12 +108,6 @@ class ComprasController extends Controller
 
     public function destroy($id)
     {
-        $compra = Compras::findOrFail($id);
-
-        $compra->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Compra eliminada correctamente.');
+        return \App\Services\RegistroCrud::borrar('compras', (int)$id);
     }
 }

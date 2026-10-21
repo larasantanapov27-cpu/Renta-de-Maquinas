@@ -52,8 +52,7 @@ class AccesoController extends Controller
             $rol=Rol::findOrFail($id);
             $seleccion=Permiso::whereIn('id_permiso',$ids)->get();
             abort_if($rol->clave!=='superadmin' && $seleccion->contains(fn($p)=>in_array($p->modulo,['usuarios','roles','permisos'])),422,'La administración de accesos se reserva al SuperAdmin.');
-            // Deletions remain disabled, even when catalog entries exist.
-            abort_if($seleccion->contains(fn($p)=>$p->accion==='eliminar'),422,'Las eliminaciones permanecen deshabilitadas.');
+            abort_if($seleccion->contains(fn($p)=>$p->accion==='eliminar' && !in_array($p->clave,\App\Services\RegistroCrud::PERMISOS_BORRADO,true)),422,'No se permite habilitar el borrado de registros históricos.');
             foreach(Permiso::all() as $permiso) {
                 $clave=['id_rol'=>$id,'id_permiso'=>$permiso->id_permiso];
                 $valores=['activo'=>in_array($permiso->id_permiso,$ids)?1:0,'updated_at'=>now()];

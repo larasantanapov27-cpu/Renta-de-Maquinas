@@ -75,7 +75,8 @@
 
                                 <td class="text-center">
 
-                                    @can('clientes.modificar')
+                                    @include('crud.acciones', ['modulo'=>'clientes', 'id'=>$cliente->id_cliente])
+@can('clientes.modificar')
 <a href="{{ route('clientes.edit', $cliente->id_cliente) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar

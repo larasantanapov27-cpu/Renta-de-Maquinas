@@ -65,12 +65,6 @@ class EstadoMaquinaController extends Controller
 
     public function destroy($id)
     {
-        $estado = EstadoMaquina::findOrFail($id);
-
-        $estado->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Estado de máquina eliminado correctamente.');
+        return \App\Services\RegistroCrud::borrar('estados_maquina', (int)$id);
     }
 }
