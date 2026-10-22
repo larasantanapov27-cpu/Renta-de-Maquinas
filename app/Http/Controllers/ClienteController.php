@@ -27,5 +27,8 @@ class ClienteController extends Controller
     {
         return $request->validate(['id_persona'=>'prohibited','correo'=>'nullable|email|max:150','persona'=>'required|array:nombre,apellidos,telefono','persona.nombre'=>'required|string|max:100','persona.apellidos'=>'required|string|max:200','persona.telefono'=>'required|string|max:20']);
     }
-    public function destroy($id) { abort(403); }
+    public function destroy($id)
+    {
+        return \App\Services\RegistroCrud::borrar('clientes', (int)$id);
+    }
 }

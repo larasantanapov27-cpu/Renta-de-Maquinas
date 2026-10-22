@@ -75,7 +75,8 @@
 
                                 <td class="text-center">
 
-                                    @can('tarifas.modificar')
+                                    @include('crud.acciones', ['modulo'=>'detalle_tarifa', 'id'=>$tarifa->id_tarifa])
+@can('tarifas.modificar')
 <a href="{{ route('detalle_tarifa.edit', $tarifa->id_tarifa) }}"
                                        class="btn btn-sm btn-outline-dark">
                                         Editar

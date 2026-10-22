@@ -69,7 +69,7 @@ class BajaMaquinaController extends Controller
         \App\Services\EstadoEquipo::cambiar((int)$data['id_maquina'],(int)DB::table('estados_maquina')->where('nombre','Baja')->value('id_estado_maquina'));
 
         return redirect()
-            ->route('panel');
+            ->route('panel')->with('success','Baja de maquinaria guardada.');
     }
 
     public function edit($id)
@@ -96,16 +96,11 @@ class BajaMaquinaController extends Controller
         $baja->update($data);
 
         return redirect()
-            ->route('panel');
+            ->route('panel')->with('success','Baja de maquinaria guardada.');
     }
 
     public function destroy($id)
     {
-        $baja = BajaMaquina::findOrFail($id);
-
-        $baja->delete();
-
-        return redirect()
-            ->route('panel');
+        return \App\Services\RegistroCrud::borrar('bajas_maquinas', (int)$id);
     }
 }

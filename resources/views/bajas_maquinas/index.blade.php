@@ -229,7 +229,8 @@
 
                                 <div class="acciones">
 
-                                    @can('bajas_maquinas.modificar')
+                                    @include('crud.acciones', ['modulo'=>'bajas_maquinas', 'id'=>$baja->id_baja])
+@can('bajas_maquinas.modificar')
 <a href="{{ route('bajas_maquinas.edit', $baja->id_baja) }}"
                                        class="btn-editar">
                                         Editar
@@ -329,7 +330,8 @@
 
                                 <div class="acciones">
 
-                                    @can('catalogos.modificar')
+                                    @include('crud.acciones', ['modulo'=>'motivos_baja','id'=>$motivo->id_motivo_baja])
+@can('catalogos.modificar')
 <a href="{{ route('motivos_baja.edit', $motivo->id_motivo_baja) }}"
                                        class="btn-editar">
                                         Editar

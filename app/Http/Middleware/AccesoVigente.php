@@ -19,8 +19,8 @@ class AccesoVigente
             return $next($request);
         }
         [$modulo,$accion] = explode('.', $name,2);
-        abort_if($accion==='destroy' || $modulo==='personas',403,'Operación deshabilitada.');
-        $accion = ['index'=>'consultar','show'=>'consultar','renta'=>'consultar','create'=>'registrar','store'=>'registrar','edit'=>'modificar','update'=>'modificar','devolucion'=>'devolver','estado_formulario'=>'cambiar_estado','estado'=>'cambiar_estado'][$accion] ?? $accion;
+        abort_if($modulo==='personas',403,'Operación deshabilitada.');
+        $accion = ['destroy'=>'eliminar','index'=>'consultar','show'=>'consultar','renta'=>'consultar','create'=>'registrar','store'=>'registrar','edit'=>'modificar','update'=>'modificar','devolucion'=>'devolver','estado_formulario'=>'cambiar_estado','estado'=>'cambiar_estado'][$accion] ?? $accion;
         if (isset(Acceso::CATALOGOS[$modulo])) {
             if ($accion==='consultar' && str_ends_with($name,'.index') && !Acceso::permite($user,'catalogos.consultar') && Acceso::catalogo($user,$modulo) && Acceso::permite($user,'catalogos.modificar')) {
                 $operations=collect(['modificar']);
@@ -36,6 +36,12 @@ class AccesoVigente
             }
             abort_unless($allowed,403,'No tienes permiso para esta operación.');
         }
-        return $request->isMethodSafe() ? $next($request) : DB::transaction(fn()=> $next($request),3);
+        if (in_array($name, ['rentas.store','rentas.devolver','mantenimientos.store','mantenimientos.update'], true)) return $next($request);
+        try {
+            return $request->isMethodSafe() ? $next($request) : DB::transaction(fn()=> $next($request),3);
+        } catch (\Illuminate\Database\QueryException $error) {
+            \Illuminate\Support\Facades\Log::error('Error al guardar registro', ['ruta'=>$name,'exception'=>$error]);
+            throw \Illuminate\Validation\ValidationException::withMessages(['operacion'=>'No se pudo completar la operación. Comprueba los datos y sus relaciones e intenta nuevamente.']);
+        }
     }
 }

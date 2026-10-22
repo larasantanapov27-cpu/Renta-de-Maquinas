@@ -1,0 +1,140 @@
+[
+    {
+        "TABLE_NAME": "bajas_maquinas",
+        "COLUMN_NAME": "id_maquina",
+        "REFERENCED_TABLE_NAME": "maquinas",
+        "REFERENCED_COLUMN_NAME": "id_maquina"
+    },
+    {
+        "TABLE_NAME": "bajas_maquinas",
+        "COLUMN_NAME": "id_motivo_baja",
+        "REFERENCED_TABLE_NAME": "motivos_baja",
+        "REFERENCED_COLUMN_NAME": "id_motivo_baja"
+    },
+    {
+        "TABLE_NAME": "clientes",
+        "COLUMN_NAME": "id_persona",
+        "REFERENCED_TABLE_NAME": "personas",
+        "REFERENCED_COLUMN_NAME": "id_persona"
+    },
+    {
+        "TABLE_NAME": "compras",
+        "COLUMN_NAME": "id_maquina",
+        "REFERENCED_TABLE_NAME": "maquinas",
+        "REFERENCED_COLUMN_NAME": "id_maquina"
+    },
+    {
+        "TABLE_NAME": "compras",
+        "COLUMN_NAME": "id_proveedor",
+        "REFERENCED_TABLE_NAME": "proveedores",
+        "REFERENCED_COLUMN_NAME": "id_proveedor"
+    },
+    {
+        "TABLE_NAME": "detalle_rentas",
+        "COLUMN_NAME": "id_maquina",
+        "REFERENCED_TABLE_NAME": "maquinas",
+        "REFERENCED_COLUMN_NAME": "id_maquina"
+    },
+    {
+        "TABLE_NAME": "detalle_rentas",
+        "COLUMN_NAME": "id_renta",
+        "REFERENCED_TABLE_NAME": "rentas",
+        "REFERENCED_COLUMN_NAME": "id_renta"
+    },
+    {
+        "TABLE_NAME": "detalle_rentas",
+        "COLUMN_NAME": "id_tarifa",
+        "REFERENCED_TABLE_NAME": "detalle_tarifa",
+        "REFERENCED_COLUMN_NAME": "id_tarifa"
+    },
+    {
+        "TABLE_NAME": "detalle_tarifa",
+        "COLUMN_NAME": "id_periodo",
+        "REFERENCED_TABLE_NAME": "periodos_renta",
+        "REFERENCED_COLUMN_NAME": "id_periodo"
+    },
+    {
+        "TABLE_NAME": "detalle_tarifa",
+        "COLUMN_NAME": "id_tipo_maquina",
+        "REFERENCED_TABLE_NAME": "tipos_maquina",
+        "REFERENCED_COLUMN_NAME": "id_tipo_maquina"
+    },
+    {
+        "TABLE_NAME": "direcciones_clientes",
+        "COLUMN_NAME": "id_cliente",
+        "REFERENCED_TABLE_NAME": "clientes",
+        "REFERENCED_COLUMN_NAME": "id_cliente"
+    },
+    {
+        "TABLE_NAME": "mantenimientos",
+        "COLUMN_NAME": "id_maquina",
+        "REFERENCED_TABLE_NAME": "maquinas",
+        "REFERENCED_COLUMN_NAME": "id_maquina"
+    },
+    {
+        "TABLE_NAME": "mantenimientos",
+        "COLUMN_NAME": "id_tipo_mantenimiento",
+        "REFERENCED_TABLE_NAME": "tipos_mantenimiento",
+        "REFERENCED_COLUMN_NAME": "id_tipo_mantenimiento"
+    },
+    {
+        "TABLE_NAME": "maquinas",
+        "COLUMN_NAME": "id_estado_maquina",
+        "REFERENCED_TABLE_NAME": "estados_maquina",
+        "REFERENCED_COLUMN_NAME": "id_estado_maquina"
+    },
+    {
+        "TABLE_NAME": "maquinas",
+        "COLUMN_NAME": "id_tipo_maquina",
+        "REFERENCED_TABLE_NAME": "tipos_maquina",
+        "REFERENCED_COLUMN_NAME": "id_tipo_maquina"
+    },
+    {
+        "TABLE_NAME": "pagos",
+        "COLUMN_NAME": "id_metodo_pago",
+        "REFERENCED_TABLE_NAME": "metodos_pago",
+        "REFERENCED_COLUMN_NAME": "id_metodo_pago"
+    },
+    {
+        "TABLE_NAME": "pagos",
+        "COLUMN_NAME": "id_renta",
+        "REFERENCED_TABLE_NAME": "rentas",
+        "REFERENCED_COLUMN_NAME": "id_renta"
+    },
+    {
+        "TABLE_NAME": "proveedores",
+        "COLUMN_NAME": "id_persona",
+        "REFERENCED_TABLE_NAME": "personas",
+        "REFERENCED_COLUMN_NAME": "id_persona"
+    },
+    {
+        "TABLE_NAME": "rentas",
+        "COLUMN_NAME": "id_cliente",
+        "REFERENCED_TABLE_NAME": "clientes",
+        "REFERENCED_COLUMN_NAME": "id_cliente"
+    },
+    {
+        "TABLE_NAME": "rentas",
+        "COLUMN_NAME": "id_estado_renta",
+        "REFERENCED_TABLE_NAME": "estados_renta",
+        "REFERENCED_COLUMN_NAME": "id_estado_renta"
+    },
+    {
+        "TABLE_NAME": "rol_permiso",
+        "COLUMN_NAME": "id_permiso",
+        "REFERENCED_TABLE_NAME": "permisos",
+        "REFERENCED_COLUMN_NAME": "id_permiso"
+    },
+    {
+        "TABLE_NAME": "rol_permiso",
+        "COLUMN_NAME": "id_rol",
+        "REFERENCED_TABLE_NAME": "roles",
+        "REFERENCED_COLUMN_NAME": "id_rol"
+    },
+    {
+        "TABLE_NAME": "users",
+        "COLUMN_NAME": "id_rol",
+        "REFERENCED_TABLE_NAME": "roles",
+        "REFERENCED_COLUMN_NAME": "id_rol"
+    }
+]

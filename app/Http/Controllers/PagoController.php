@@ -171,16 +171,7 @@ class PagoController extends Controller
     // ELIMINAR PAGO
     public function destroy($id)
     {
-        $pago = Pago::findOrFail($id);
-
-        $pago->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with(
-                'success',
-                'Pago eliminado correctamente.'
-            );
+        return \App\Services\RegistroCrud::borrar('pagos', (int)$id);
     }
 
 
@@ -222,8 +213,9 @@ class PagoController extends Controller
         $total = $detalles->sum(function ($detalle) {
 
             return
-                ($detalle->cantidad_periodos
-                    * $detalle->precio_aplicado)
+                round($detalle->cantidad_periodos
+                    * $detalle->precio_aplicado, 2)
+                + $detalle->deposito_aplicado
                 - $detalle->descuento
                 + $detalle->cargo_adicional
                 + $detalle->cargo_danio;

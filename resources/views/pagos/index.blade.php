@@ -254,7 +254,8 @@
 
 
                                     {{-- EDITAR PAGO --}}
-                                    @can('pagos.modificar')
+                                    @include('crud.acciones', ['modulo'=>'pagos', 'id'=>$pago->id_pago])
+@can('pagos.modificar')
 <a href="{{ route('pagos.edit', $pago->id_pago) }}"
                                        class="btn btn-sm btn-outline-dark">
 

@@ -236,7 +236,8 @@
 
                         <td>
 
-                            @can('mantenimientos.modificar')
+                            @include('crud.acciones', ['modulo'=>'mantenimientos','id'=>$mantenimiento->id_mantenimiento])
+@can('mantenimientos.modificar')
 <a href="{{ route(
                                 'mantenimientos.edit',
                                 $mantenimiento->id_mantenimiento
@@ -324,7 +325,8 @@
 
                         <td>
 
-                            @can('catalogos.modificar')
+                            @include('crud.acciones', ['modulo'=>'tipos_mantenimiento','id'=>$tipo->id_tipo_mantenimiento])
+@can('catalogos.modificar')
 <a href="{{ route(
                                 'tipos_mantenimiento.edit',
                                 $tipo->id_tipo_mantenimiento

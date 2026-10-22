@@ -111,26 +111,25 @@ class MantenimientoController extends Controller
 
     public function destroy($id)
     {
-        $mantenimiento = Mantenimiento::findOrFail($id);
-
-        $mantenimiento->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Mantenimiento eliminado correctamente.');
+        return \App\Services\RegistroCrud::borrar('mantenimientos', (int)$id);
     }
     private function guardar(array $data, ?int $id=null): void
     {
-        $equipo=DB::table('maquinas')->where('id_maquina',$data['id_maquina'])->lockForUpdate()->first();
-        $registro=$id ? Mantenimiento::lockForUpdate()->findOrFail($id):null;
-        abort_if($registro && (int)$registro->id_maquina!==(int)$data['id_maquina'],422,'No se puede trasladar el mantenimiento a otra máquina.');
-        $rentada=DB::table('detalle_rentas as d')->join('rentas as r','r.id_renta','=','d.id_renta')->join('estados_renta as e','e.id_estado_renta','=','r.id_estado_renta')->where('d.id_maquina',$data['id_maquina'])->whereNull('d.fecha_devolucion_real')->whereIn('e.nombre',['Activa','Programada'])->exists();
-        $otro=DB::table('mantenimientos')->where('id_maquina',$data['id_maquina'])->whereNull('fecha_salida')->when($id,fn($q)=>$q->where('id_mantenimiento','!=',$id))->exists();
-        abort_if($rentada || $otro || DB::table('bajas_maquinas')->where('id_maquina',$data['id_maquina'])->exists(),422,'El equipo está rentado, reservado, en otro mantenimiento o dado de baja.');
-        $data['costo']=$data['costo'] ?? 0;
-        if ($registro) $registro->update($data); else Mantenimiento::create($data);
-        $nombre=empty($data['fecha_salida'])?'Mantenimiento':'Disponible';
-        $estado=DB::table('estados_maquina')->where('nombre',$nombre)->value('id_estado_maquina');
-        \App\Services\EstadoEquipo::cambiar((int)$data['id_maquina'],(int)$estado);
+        \App\Services\TransaccionSql::ejecutar(['mantenimientos','maquinas','tipos_mantenimiento','estados_maquina','rentas','detalle_rentas','estados_renta','bajas_maquinas'], function () use ($data, $id) {
+            $equipo=DB::table('maquinas')->where('id_maquina',$data['id_maquina'])->lockForUpdate()->first();
+            abort_unless($equipo,422,'La máquina ya no existe.');
+            abort_unless(DB::table('tipos_mantenimiento')->where('id_tipo_mantenimiento',$data['id_tipo_mantenimiento'])->lockForUpdate()->exists(),422,'El tipo de mantenimiento ya no existe.');
+            $registro=$id ? Mantenimiento::lockForUpdate()->findOrFail($id):null;
+            abort_if($registro && (int)$registro->id_maquina!==(int)$data['id_maquina'],422,'No se puede trasladar el mantenimiento a otra máquina.');
+            $rentada=DB::table('detalle_rentas as d')->join('rentas as r','r.id_renta','=','d.id_renta')->join('estados_renta as e','e.id_estado_renta','=','r.id_estado_renta')->where('d.id_maquina',$data['id_maquina'])->whereNull('d.fecha_devolucion_real')->whereIn('e.nombre',['Activa','Programada'])->exists();
+            $otro=DB::table('mantenimientos')->where('id_maquina',$data['id_maquina'])->whereNull('fecha_salida')->when($id,fn($q)=>$q->where('id_mantenimiento','!=',$id))->exists();
+            abort_if($rentada || $otro || DB::table('bajas_maquinas')->where('id_maquina',$data['id_maquina'])->exists(),422,'El equipo está rentado, reservado, en otro mantenimiento o dado de baja.');
+            $data['costo']=$data['costo'] ?? 0;
+            if ($registro) $registro->update($data); else Mantenimiento::create($data);
+            $nombre=empty($data['fecha_salida'])?'Mantenimiento':'Disponible';
+            $estado=DB::table('estados_maquina')->where('nombre',$nombre)->value('id_estado_maquina');
+            abort_unless($estado,422,'Falta el estado operativo en el catálogo.');
+            \App\Services\EstadoEquipo::cambiar((int)$data['id_maquina'],(int)$estado);
+        });
     }
 }

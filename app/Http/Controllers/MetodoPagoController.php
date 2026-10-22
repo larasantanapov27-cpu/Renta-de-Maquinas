@@ -67,25 +67,6 @@ class MetodoPagoController extends Controller
 
     public function destroy($id)
     {
-        $usado = DB::table('pagos')
-            ->where('id_metodo_pago', $id)
-            ->exists();
-
-        if ($usado) {
-            return redirect()
-                ->route('panel')
-                ->with(
-                    'error',
-                    'No se puede eliminar porque el método está asociado a uno o más pagos.'
-                );
-        }
-
-        DB::table('metodos_pago')
-            ->where('id_metodo_pago', $id)
-            ->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Método de pago eliminado correctamente.');
+        return \App\Services\RegistroCrud::borrar('metodos_pago', (int)$id);
     }
 }

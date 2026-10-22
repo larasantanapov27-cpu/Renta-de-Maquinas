@@ -86,7 +86,8 @@
                         <td class="text-center">
 @can('maquinas.cambiar_estado')<a class="btn btn-sm btn-secondary" href="{{ route('maquinas.estado_formulario',$maquina->id_maquina) }}">Cambiar estado</a>@endcan
 
-                            @can('maquinas.modificar')
+                            @include('crud.acciones', ['modulo'=>'maquinas', 'id'=>$maquina->id_maquina])
+@can('maquinas.modificar')
 <a
                                 href="{{ route('maquinas.edit', $maquina->id_maquina) }}"
                                 class="btn btn-outline-dark btn-sm"

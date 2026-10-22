@@ -66,12 +66,6 @@ class TipoMaquinaController extends Controller
 
     public function destroy($id)
     {
-        $tipo = TipoMaquina::findOrFail($id);
-
-        $tipo->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Tipo de máquina eliminado correctamente.');
+        return \App\Services\RegistroCrud::borrar('tipos_maquina', (int)$id);
     }
 }

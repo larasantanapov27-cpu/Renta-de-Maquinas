@@ -160,7 +160,8 @@
                                 class="d-flex justify-content-center align-items-center gap-1 flex-nowrap"
                             >
 
-                                @can('compras.modificar')
+                                @include('crud.acciones', ['modulo'=>'compras', 'id'=>$compra->id_compra])
+@can('compras.modificar')
 <a
                                     href="{{ route('compras.edit', $compra->id_compra) }}"
                                     class="btn btn-outline-dark btn-sm"

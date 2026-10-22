@@ -66,7 +66,8 @@
 
                         <td class="text-center">
 
-                            @can('catalogos.modificar')
+                            @include('crud.acciones', ['modulo'=>'tipos_maquina', 'id'=>$tipo->id_tipo_maquina])
+@can('catalogos.modificar')
 <a
                                 href="{{ route('tipos_maquina.edit', $tipo->id_tipo_maquina) }}"
                                 class="btn btn-outline-dark btn-sm"

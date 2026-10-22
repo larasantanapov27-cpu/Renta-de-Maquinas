@@ -156,6 +156,7 @@ class AccesoController extends Controller
     public function permisosGuardar(Request $request, int $id)
     {
         Gate::authorize('permisos.configurar');
+<<<<<<< HEAD
 
         $data = $request->validate([
             'permisos' => ['sometimes', 'array'],
@@ -214,6 +215,20 @@ class AccesoController extends Controller
                         $clave + $valores + ['created_at' => $fecha]
                     );
                 }
+=======
+        $data=$request->validate(['permisos'=>'sometimes|array','permisos.*'=>'integer|distinct|exists:permisos,id_permiso']);
+        $ids=array_map('intval',$data['permisos'] ?? []);
+        ContinuidadAdmin::cambiar(function() use($ids,$id) {
+            $rol=Rol::findOrFail($id);
+            $seleccion=Permiso::whereIn('id_permiso',$ids)->get();
+            abort_if($rol->clave!=='superadmin' && $seleccion->contains(fn($p)=>in_array($p->modulo,['usuarios','roles','permisos'])),422,'La administración de accesos se reserva al SuperAdmin.');
+            abort_if($seleccion->contains(fn($p)=>$p->accion==='eliminar' && !in_array($p->clave,\App\Services\RegistroCrud::PERMISOS_BORRADO,true)),422,'No se permite habilitar el borrado de registros históricos.');
+            foreach(Permiso::all() as $permiso) {
+                $clave=['id_rol'=>$id,'id_permiso'=>$permiso->id_permiso];
+                $valores=['activo'=>in_array($permiso->id_permiso,$ids)?1:0,'updated_at'=>now()];
+                if (DB::table('rol_permiso')->where($clave)->exists()) DB::table('rol_permiso')->where($clave)->update($valores);
+                else DB::table('rol_permiso')->insert($clave+$valores+['created_at'=>now()]);
+>>>>>>> 7c138c03672fada061748929f85f1bfaebb206ab
             }
         });
 

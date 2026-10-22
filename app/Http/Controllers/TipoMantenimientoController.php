@@ -68,12 +68,6 @@ class TipoMantenimientoController extends Controller
     // Eliminar tipo de mantenimiento
     public function destroy($id)
     {
-        $tipo = TipoMantenimiento::findOrFail($id);
-
-        $tipo->delete();
-
-        return redirect()
-            ->route('panel')
-            ->with('success', 'Tipo de mantenimiento eliminado correctamente');
+        return \App\Services\RegistroCrud::borrar('tipos_mantenimiento', (int)$id);
     }
 }

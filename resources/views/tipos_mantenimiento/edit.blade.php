@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('titulo', 'Editar tipo de mantenimiento')
 
@@ -69,7 +69,7 @@
 
             <button
                 type="submit"
-                class="boton-principal"
+                class="btn btn-dark"
             >
                 Guardar cambios
             </button>
